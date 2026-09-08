@@ -15,9 +15,11 @@ Licence selection is deliberately deferred and does not block local extension de
 
 - [x] Teach package.json, manifest.json, TypeScript configuration, content scripts and build output.
 - [x] Initialise npm and TypeScript, choose and document the minimal build toolchain.
-- Create a Manifest V3 manifest and ChatGPT content script.
-- Display a harmless SecureAI Guard indicator, clearly stating that checking is not active.
-- Document unpacked installation and verify loading in Chrome.
+- [x] Create a Manifest V3 manifest and ChatGPT content script.
+- [x] Implement a harmless SecureAI Guard indicator, clearly stating that checking is not active.
+- [x] Document unpacked installation.
+- [x] Verify Chrome loading, indicator appearance, click dismissal and return after reload.
+- [ ] Follow-up shell checks: keyboard dismissal and absence on unrelated sites.
 
 ## Milestone 2 — Structured detection
 

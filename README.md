@@ -2,7 +2,7 @@
 
 A planned privacy-focused Chrome extension that helps people detect and redact sensitive information before sending prompts to generative AI tools.
 
-**Status: foundation and TypeScript build toolchain complete. No loadable extension or privacy protection is implemented yet.**
+**Status: minimal extension shell loaded in Chrome; indicator appearance, click dismissal and reload verified. Sensitive-information checking is not active.**
 
 The initial target is ChatGPT. Inspection will run locally in the browser, without sending prompt content to a detection service or retaining it in extension storage.
 
@@ -53,7 +53,7 @@ npm run build
 
 Verified locally with Node.js 25.0.0 and npm 11.6.2; this records the tested environment, not a requirement for that exact Node version. TypeScript and esbuild are pinned in package.json and the lockfile.
 
-The source entry point currently does nothing. A manifest and visible indicator come in the next checkpoint; there is currently nothing to load into Chrome. Do not edit dist directly: build it from src. Neither dist nor node_modules is committed.
+The build copies manifest.json and bundles the content script into dist. Follow the [unpacked installation guide](docs/INSTALLATION.md) to load that folder into Chrome. The script displays a dismissible “SecureAI Guard — Checking not active” indicator on ChatGPT only. Do not edit dist directly: build it from src. Neither dist nor node_modules is committed.
 
 ## Licence
 

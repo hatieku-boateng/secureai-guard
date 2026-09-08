@@ -1,6 +1,6 @@
 # Security
 
-SecureAI Guard currently has documentation and a build toolchain with an inert source entry point. It provides no active browser protection yet. No release has a security-support commitment.
+SecureAI Guard currently has a minimal indicator-only extension shell, with Chrome loading, indicator appearance, click dismissal and reload verified. It provides no active browser protection yet. No release has a security-support commitment.
 
 Do not publish credentials, private documents, personal information or exploit details in public issues. Use synthetic reproductions for ordinary bug reports.
 

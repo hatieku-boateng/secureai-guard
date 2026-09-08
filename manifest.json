@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "SecureAI Guard",
+  "version": "0.1.0",
+  "description": "Prototype indicator only. Sensitive-information checking is not active yet.",
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

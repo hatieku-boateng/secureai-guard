@@ -66,3 +66,35 @@ Create the smallest reproducible TypeScript build before adding Chrome integrati
 ### Learning checkpoint
 
 The development toolchain works, but this is not a loadable extension. Next: add manifest.json and a harmless visible indicator, document unpacked installation, and verify in Chrome. No detector, model or prompt interception has been added.
+
+## 2026-09-08 — Milestone 1: minimal extension shell
+
+### Objective and concepts
+
+Add a Manifest V3 manifest and a harmless ChatGPT indicator. The manifest tells Chrome where and when to run the content script. A shadow root keeps the indicator's styles separate from the site's styles; it is not a security boundary against the host page.
+
+### Changes
+
+- Added root manifest.json with only https://chatgpt.com/* as its content-script match.
+- Updated the build script to copy the manifest into dist alongside content.js.
+- Implemented a compact bottom-left indicator with a named dismiss button and visible keyboard focus. It states “Checking not active”. Dismissal removes the indicator until reload without saving anything.
+- Added docs/INSTALLATION.md and updated README, architecture, roadmap and security status.
+
+### Verification and remaining check
+
+- `npm run build` passed strict type checking and bundling.
+- `node --check dist/content.js` passed.
+- Parsed the built manifest and verified every referenced script exists in dist.
+- Reviewed source: no prompt reads, send interception, storage or network calls; no extra extension API permissions.
+- Chrome was absent from standard Program Files and per-user installation paths and no Chrome window was found. Brave was running. Browser choice was requested before proceeding with the visible loading check.
+- Actual Chrome loading, appearance and keyboard dismissal remain unverified. Milestone 1 is not yet complete.
+
+Next checkpoint: load the built dist folder in the chosen browser and verify the installation checklist. Record Brave results separately if used, and retain Chrome verification as pending until performed.
+
+## 2026-09-08 — Chrome shell check confirmed
+
+The user installed Chrome and confirmed loading the unpacked extension. A supplied screenshot showed one SecureAI Guard indicator with “Checking not active” on ChatGPT. The user then confirmed clicking the dismiss button hides it and reloading the page restores it.
+
+The rebuild and JavaScript syntax check passed before the manual test. Computer Use could not reliably determine the browser URL, so browser evidence comes from the user's screenshot and explicit confirmations, not an automated browser test. Keyboard dismissal and absence on unrelated sites have not been tested and remain listed as follow-up checks.
+
+Updated README, security status, architecture and roadmap to reflect the observed result. This completes the basic visible-shell checkpoint; sensitive-information detection is still inactive. Next learning step: define the Finding structure and implement an email detector with synthetic tests, before connecting detection to the page.

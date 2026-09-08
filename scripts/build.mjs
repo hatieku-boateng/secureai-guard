@@ -1,5 +1,6 @@
 import { build } from "esbuild";
 import { fileURLToPath } from "node:url";
+import { copyFile } from "node:fs/promises";
 
 await build({
   absWorkingDir: fileURLToPath(new URL("../", import.meta.url)),
@@ -11,3 +12,8 @@ await build({
   target: "es2022",
   logLevel: "info",
 });
+
+await copyFile(
+  new URL("../manifest.json", import.meta.url),
+  new URL("../dist/manifest.json", import.meta.url),
+);

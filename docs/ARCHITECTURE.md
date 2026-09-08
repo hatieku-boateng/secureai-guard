@@ -52,4 +52,6 @@ Implementation must handle repeat clicks, keyboard submission, stale results and
 - Evaluate Transformers.js and small compatible NER models in Milestone 4.
 - Browser File API for TXT; evaluate DOCX/PDF libraries and OCR later.
 
-The build toolchain now uses TypeScript for strict checks and esbuild for a browser IIFE bundle, as recorded in [ADR 0002](decisions/0002-typescript-esbuild-toolchain.md). The content-script entry point is inert. No model downloads or Chrome permissions have been introduced.
+The build toolchain uses TypeScript for strict checks and esbuild for a browser IIFE bundle, as recorded in [ADR 0002](decisions/0002-typescript-esbuild-toolchain.md). The build also copies the root manifest into dist.
+
+The minimal content script displays a dismissible indicator inside a shadow root, which separates its styles from ChatGPT styles. A unique host ID avoids duplicate indicators on repeated injection. The manifest limits execution to https://chatgpt.com/* at document_idle, in the default isolated world and top frame. No prompt reading, send handlers, persistence, network calls, model downloads or additional API permissions are implemented. This is a shell, not the site adapter's inspection flow. Chrome loading and indicator appearance are verified by user confirmation and screenshot; the user also confirmed click dismissal and return after reload. Keyboard interaction and unrelated-site checks remain unverified.
