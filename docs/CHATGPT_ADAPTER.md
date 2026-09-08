@@ -19,3 +19,5 @@ Protection is session-scoped and starts disabled. The indicator includes a keybo
 The indicator is positioned directly above the ChatGPT composer area, centered in the viewport, so the session control is visually associated with composing a prompt. It remains in a separate shadow-root host to avoid changing ChatGPT's own composer DOM. Responsive positioning and narrow-window checks remain part of browser verification.
 
 The adapter accepts nested elements inside a contenteditable composer and labelled `button` or `role="button"` send controls. This covers ChatGPT layouts where Enter originates from a paragraph inside the editor or the send arrow is not a native button.
+
+It also listens during capture for `pointerdown` and `submit` events. A form submission is intercepted only when its form contains the supported composer. These additional paths cover ChatGPT controls that consume click events internally.

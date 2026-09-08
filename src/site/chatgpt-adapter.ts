@@ -67,9 +67,12 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     allowedSnapshot = null;
     return allowed;
   };
-  const handleClick = (event: MouseEvent): void => {
+  const handleAttempt = (event: Event): void => {
     const target = event.target;
-    if (!(target instanceof document.defaultView!.Element) || !isSendButton(target.closest("button") ?? target)) return;
+    if (target instanceof document.defaultView!.HTMLFormElement) {
+      const composer = findChatGptComposer(document);
+      if (!composer || !target.contains(composer)) return;
+    } else if (!(target instanceof document.defaultView!.Element) || !isSendButton(target.closest("button, [role=button]") ?? target)) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
     if (!enabled) return;
@@ -79,6 +82,9 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
       event.stopImmediatePropagation();
     }
   };
+  const handleClick = (event: MouseEvent): void => handleAttempt(event);
+  const handlePointerDown = (event: PointerEvent): void => handleAttempt(event);
+  const handleSubmit = (event: SubmitEvent): void => handleAttempt(event);
   const handleKeydown = (event: KeyboardEvent): void => {
     if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
     const target = event.target;
@@ -93,14 +99,18 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     }
   };
   document.addEventListener("click", handleClick, true);
+  document.addEventListener("pointerdown", handlePointerDown, true);
   document.addEventListener("keydown", handleKeydown, true);
+  document.addEventListener("submit", handleSubmit, true);
   return {
     allowNextSubmit: snapshot => { allowedSnapshot = snapshot; },
     setEnabled: value => { enabled = value; if (!value) allowedSnapshot = null; },
     isEnabled: () => enabled,
     cleanup: () => {
     document.removeEventListener("click", handleClick, true);
+    document.removeEventListener("pointerdown", handlePointerDown, true);
     document.removeEventListener("keydown", handleKeydown, true);
+    document.removeEventListener("submit", handleSubmit, true);
     },
   };
 }

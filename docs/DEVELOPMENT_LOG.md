@@ -242,3 +242,9 @@ The user reported that `0249663991` was sent without a review panel. The detecto
 The second manual screenshot showed the number still sent while the indicator reported protection on. The detector itself recognizes the number, so the adapter path was the likely fault. Expanded interception to recognize Enter events from nested elements inside a contenteditable composer and labelled `role="button"` send controls, in addition to native buttons.
 
 Verification: all 174 tests passed across nine files and `npm run build` passed. Added regression tests for nested editor Enter and role-button send controls. Reload the unpacked extension before repeating the Chrome check.
+
+## 2026-09-08 — Add capture-layer submission interception
+
+The user supplied another Chrome screenshot showing `0249663991` sent while protection was visibly on. Added capture listeners for pointerdown and form submit, while retaining click and keyboard handling. Form submits are accepted only when the form contains the supported composer; all paths share the same snapshot, detector and review callback.
+
+Verification: all 175 tests passed across nine files and `npm run build` passed. The content bundle is 271.3 KB. Reload the unpacked extension after this build; the next manual check must turn protection on before entering the number and verify that a review panel appears.

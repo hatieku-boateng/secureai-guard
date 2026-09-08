@@ -74,6 +74,18 @@ describe("ChatGPT composer adapter", () => {
     controller.cleanup();
   });
 
+  it("intercepts a form submit containing the composer", () => {
+    const dom = new JSDOM('<form><div contenteditable="true" aria-label="Ask ChatGPT">adapter test</div><button type="submit">arrow</button></form>');
+    const attempts: string[] = [];
+    const controller = installSubmitInterception(dom.window.document, snapshot => { attempts.push(snapshot.text); return true; });
+    controller.setEnabled(true);
+    const event = new dom.window.Event("submit", { bubbles: true, cancelable: true });
+    dom.window.document.querySelector("form")!.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(attempts).toEqual(["adapter test"]);
+    controller.cleanup();
+  });
+
   it("does not intercept empty prompts or unsupported buttons", () => {
     const dom = new JSDOM('<textarea placeholder="Ask ChatGPT"></textarea><button aria-label="Attach file">Attach</button>');
     let attempts = 0;
