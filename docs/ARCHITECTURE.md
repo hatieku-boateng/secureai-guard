@@ -18,7 +18,7 @@ The second standalone rule is src/detection/ghana-phone.ts; see [Ghana phone det
 
 The third standalone rule is src/detection/international-phone.ts; see [international phone detection scope](INTERNATIONAL_PHONE_DETECTION.md). It uses local full metadata and delegates Ghana formats to the Ghana rule. Its bundle impact must be measured before page integration.
 
-The first identifier rule is src/detection/ghana-card.ts; see [Ghana Card detection scope](GHANA_CARD_DETECTION.md). It matches format only and does not validate identity. Coordinator overlap handling remains before browser integration.
+The first identifier rule is src/detection/ghana-card.ts; see [Ghana Card detection scope](GHANA_CARD_DETECTION.md). It matches format only and does not validate identity. The coordinator in src/detection/coordinator.ts now runs all current rules and resolves overlaps; see [coordinator policy](INSPECTION_COORDINATOR.md).
 
 ```ts
 type Finding = {

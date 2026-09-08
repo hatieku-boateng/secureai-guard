@@ -28,6 +28,7 @@ Licence selection is deliberately deferred and does not block local extension de
 - [x] Add Ghanaian mobile/fixed-line format detection, including +233/00233 forms, with synthetic tests.
 - [x] Add explicit international phone-format detection with maintained local metadata and synthetic tests.
 - [x] Add Ghana Card PIN shape detection with synthetic tests.
+- [x] Add the inspection coordinator and deterministic overlap handling.
 - [ ] Add other selected institutional identifier rules incrementally.
 - Document supported formats and validation limits.
 - Build synthetic cases and tests for valid/invalid values, punctuation, boundaries, overlaps and false positives.

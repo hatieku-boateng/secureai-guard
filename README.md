@@ -53,6 +53,8 @@ npm run build
 
 Run `npm test` for the synthetic detector tests. The [email detector](docs/EMAIL_DETECTION.md), [Ghana phone detector](docs/GHANA_PHONE_DETECTION.md), [international phone detector](docs/INTERNATIONAL_PHONE_DETECTION.md) and [Ghana Card detector](docs/GHANA_CARD_DETECTION.md) are implemented separately and are not yet active on ChatGPT; the visible extension remains an indicator only.
 
+The [inspection coordinator](docs/INSPECTION_COORDINATOR.md) combines those rules into one local result. It is also not connected to the page yet.
+
 Verified locally with Node.js 25.0.0 and npm 11.6.2; this records the tested environment, not a requirement for that exact Node version. TypeScript and esbuild are pinned in package.json and the lockfile.
 
 The build copies manifest.json and bundles the content script into dist. Follow the [unpacked installation guide](docs/INSTALLATION.md) to load that folder into Chrome. The script displays a dismissible “SecureAI Guard — Checking not active” indicator on ChatGPT only. Do not edit dist directly: build it from src. Neither dist nor node_modules is committed.

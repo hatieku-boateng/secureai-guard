@@ -140,3 +140,13 @@ The rule is local and format-only. It does not perform checksum, registry, ident
 Verification: all 130 tests passed across four files. The Ghana Card suite covers valid case variants, malformed lengths, separators, boundaries, repeats and UTF-16 offsets; the existing email, Ghana phone and international phone suites remain green. `npm run build` passed strict type checking and bundling. The rule is not imported by the content script, so browser behavior is unchanged.
 
 Learning checkpoint: the first selected identifier rule is documented and tested, but it only recognizes a shape. Next: create the inspection coordinator to run the detectors together and resolve duplicate or overlapping findings before any ChatGPT submission interception.
+
+## 2026-09-08 — Milestone 2: inspection coordinator
+
+Objective: combine the four current local detectors into one consistent result before browser integration. Added src/detection/coordinator.ts, tests/coordinator.test.ts and docs/INSPECTION_COORDINATOR.md.
+
+`inspectText` preserves the exact text snapshot and runs email, Ghana phone, international phone and Ghana Card detection. `resolveFindings` removes duplicates and uses documented deterministic priority: identifier, email, phone, person; then longer range and stable ID. It returns findings in text order without mutating caller data.
+
+Verification: all 134 tests passed across five files. `npm run build` passed strict TypeScript checking and bundling. The coordinator is not imported by the content script, so the browser indicator and site behavior remain unchanged.
+
+Learning checkpoint: detector output is now unified and overlap behavior is explicit. Next: select and document additional institutional identifier formats, then build a review/redaction layer before intercepting ChatGPT submission.
