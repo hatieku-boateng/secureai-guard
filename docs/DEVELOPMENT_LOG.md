@@ -30,3 +30,14 @@ Documentation and local relative links are checked before the foundation commit.
 ### Next checkpoint
 
 After publication, pause to review the foundation. Begin Milestone 1 by explaining the extension's configuration files and content script before installing the toolchain.
+
+## 2026-09-08 — GitHub foundation published
+
+- Created the public repository https://github.com/hatieku-boateng/secureai-guard under the verified project-owner account.
+- Connected origin and pushed main with foundation commit `4b3099c` (`docs: establish project foundation`).
+- Verified all 11 local project files and their relative Markdown links; the staged whitespace check passed.
+- Verified GitHub visibility is PUBLIC, its default branch is main, and the remote main commit matches the foundation commit. GitHub API listings confirmed the root and documentation folders.
+- Marked publication complete in the roadmap. Licence selection remains deferred; no application code has been written.
+- This entry and the roadmap update form a second documentation commit. Verify the final remote commit and complete file tree after pushing it.
+
+Learning checkpoint: the documented project now has local version history and a public remote copy. Next is the minimal extension shell, beginning with an explanation of its configuration files.

@@ -6,7 +6,7 @@ Work in small learning checkpoints. Explain the purpose and affected files befor
 
 - [x] Define problem, users and MVP.
 - [x] Document privacy principles, architecture and roadmap.
-- [ ] Publish and verify the foundation on GitHub.
+- [x] Publish and verify the foundation on GitHub.
 - [ ] Discuss and record a licence decision before outside contributions.
 
 Licence selection is deliberately deferred and does not block local extension development.
