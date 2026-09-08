@@ -36,8 +36,9 @@ Licence selection is deliberately deferred and does not block local extension de
 
 ## Milestone 3 — Review and redaction
 
-- Intercept and verify supported submission actions.
-- Add accessible review, selection, preview and meaningful placeholders.
+- [x] Add pure selected-redaction preview with stale-range and overlap checks.
+- [ ] Intercept and verify supported submission actions.
+- [ ] Add accessible review, selection and preview panel using the redaction layer.
 - Preserve content on edit/cancel, prevent stale approvals, and support deliberate send unchanged.
 - Verify complete browser flows, including repeated send attempts and changed prompts.
 

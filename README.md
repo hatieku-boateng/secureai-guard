@@ -57,6 +57,8 @@ The [inspection coordinator](docs/INSPECTION_COORDINATOR.md) combines those rule
 
 The [institutional identifier detector](docs/INSTITUTIONAL_ID_DETECTION.md) uses explicit student/employee labels rather than guessing from arbitrary numbers.
 
+The [redaction layer](docs/REDACTION.md) can preview selected replacements while preserving the original text. It is not connected to ChatGPT submission yet.
+
 Verified locally with Node.js 25.0.0 and npm 11.6.2; this records the tested environment, not a requirement for that exact Node version. TypeScript and esbuild are pinned in package.json and the lockfile.
 
 The build copies manifest.json and bundles the content script into dist. Follow the [unpacked installation guide](docs/INSTALLATION.md) to load that folder into Chrome. The script displays a dismissible “SecureAI Guard — Checking not active” indicator on ChatGPT only. Do not edit dist directly: build it from src. Neither dist nor node_modules is committed.

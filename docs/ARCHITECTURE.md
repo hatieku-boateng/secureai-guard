@@ -22,6 +22,8 @@ The first identifier rule is src/detection/ghana-card.ts; see [Ghana Card detect
 
 The institutional identifier rule in src/detection/institutional-id.ts is deliberately context-based because local formats vary. It recognizes labelled student/employee values and returns only the value range. The coordinator will include it after its standalone behavior is tested.
 
+The pure redaction layer in src/detection/redaction.ts consumes selected coordinator findings and returns an in-memory protected preview. It validates the original snapshot and rejects stale or overlapping findings; see [redaction policy](REDACTION.md). It is not connected to the site adapter yet.
+
 ```ts
 type Finding = {
   id: string;

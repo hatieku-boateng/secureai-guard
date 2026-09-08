@@ -151,6 +151,16 @@ Verification: all 134 tests passed across five files. `npm run build` passed str
 
 Learning checkpoint: detector output is now unified and overlap behavior is explicit. Next: select and document additional institutional identifier formats, then build a review/redaction layer before intercepting ChatGPT submission.
 
+## 2026-09-08 — Milestone 3: pure selected redaction
+
+Objective: build the safe text transformation underneath the review panel before touching ChatGPT submission. Added src/detection/redaction.ts, tests/redaction.test.ts and docs/REDACTION.md.
+
+`redactSelected` preserves the original, verifies each finding still matches the inspected snapshot, rejects invalid/overlapping ranges and creates meaningful per-category placeholders in text order. It performs no storage, network, page access or submission.
+
+Verification: all 156 tests passed across seven files and `npm run build` passed strict type checking and bundling. The coordinator result is now suitable for a future review panel, but the content script remains indicator-only.
+
+Learning checkpoint: the core preview transformation is complete. Next: design and implement the accessible review panel in isolation, then verify it before connecting submission interception.
+
 ## 2026-09-08 — Milestone 2: labelled institutional identifiers
 
 Objective: cover student and employee identifiers without pretending that one Ghana-wide format exists. Added src/detection/institutional-id.ts, tests/institutional-id.test.ts and docs/INSTITUTIONAL_ID_DETECTION.md.
