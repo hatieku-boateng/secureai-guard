@@ -44,6 +44,20 @@ describe("ChatGPT composer adapter", () => {
     cleanup.cleanup();
   });
 
+  it("intercepts ChatGPT's current composer-submit-button", () => {
+    const dom = new JSDOM('<textarea id="prompt-textarea" placeholder="Ask ChatGPT">0249663991</textarea><button id="composer-submit-button" aria-label="Send prompt"></button>');
+    const attempts: string[] = [];
+    const controller = installSubmitInterception(dom.window.document, snapshot => { attempts.push(snapshot.text); return true; });
+    controller.setEnabled(true);
+    const button = dom.window.document.querySelector<HTMLButtonElement>("#composer-submit-button")!;
+    const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    button.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(attempts).toEqual(["0249663991"]);
+    expect(findChatGptSendButton(dom.window.document)).toBe(button);
+    controller.cleanup();
+  });
+
   it("intercepts Enter without Shift in the composer, but allows Shift+Enter", () => {
     const dom = new JSDOM('<textarea placeholder="Ask ChatGPT">adapter test</textarea>');
     const attempts: string[] = [];

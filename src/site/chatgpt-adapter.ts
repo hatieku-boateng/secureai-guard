@@ -7,6 +7,10 @@ const selectors = [
   '[contenteditable="true"]',
 ];
 
+// ChatGPT's current composer uses this native button. Keep the exact selectors
+// ahead of the broader label scan so icon-only descendants are handled reliably.
+const chatGptSendSelectors = '#composer-submit-button, button[aria-label="Send prompt"], button[data-testid="composer-submit-button"]';
+
 /** Find the first supported ChatGPT composer without modifying the page. */
 export function findChatGptComposer(document: Document): HTMLElement | null {
   for (const selector of selectors) {
@@ -42,6 +46,7 @@ export function isCurrentSnapshot(snapshot: ComposerSnapshot): boolean {
 
 function isSendButton(element: Element): boolean {
   if (element.tagName !== "BUTTON" && element.getAttribute("role") !== "button") return false;
+  if (element.matches(chatGptSendSelectors)) return true;
   const label = `${element.getAttribute("aria-label") ?? ""} ${element.getAttribute("data-testid") ?? ""} ${element.textContent ?? ""}`;
   return /(?:send|submit|prompt-submit)/i.test(label);
 }
@@ -54,6 +59,8 @@ function isLikelyComposerSendTarget(document: Document, event: MouseEvent): bool
 }
 
 export function findChatGptSendButton(document: Document): HTMLButtonElement | null {
+  const exact = document.querySelector<HTMLButtonElement>(chatGptSendSelectors);
+  if (exact) return exact;
   return Array.from(document.querySelectorAll<HTMLElement>("button, [role=button]")).find(button => isSendButton(button)) as HTMLButtonElement | undefined ?? null;
 }
 
@@ -79,7 +86,7 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     if (target instanceof document.defaultView!.HTMLFormElement) {
       const composer = findChatGptComposer(document);
       if (!composer || !target.contains(composer)) return;
-    } else if (!(target instanceof document.defaultView!.Element) || (!isSendButton(target.closest("button, [role=button]") ?? target) && !(event instanceof document.defaultView!.MouseEvent && isLikelyComposerSendTarget(document, event)))) return;
+    } else if (!(target instanceof document.defaultView!.Element) || (!isSendButton(target.closest(`${chatGptSendSelectors}, button, [role=button]`) ?? target) && !(event instanceof document.defaultView!.MouseEvent && isLikelyComposerSendTarget(document, event)))) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
     if (!enabled) return;

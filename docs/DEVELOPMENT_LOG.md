@@ -254,3 +254,9 @@ Verification: all 175 tests passed across nine files and `npm run build` passed.
 The user supplied a third screenshot showing the number still sent while protection was on. Added a geometry fallback for clicks in the rightmost 110 pixels of the active composer, covering icon-only controls with no reliable button, role or label. It remains scoped to the composer rectangle and does not cover the attachment/microphone areas.
 
 Verification: all 176 tests passed across nine files and `npm run build` passed. The content bundle is 271.8 KB. Reload the extension again before the next manual test.
+
+## 2026-09-08 — Target current ChatGPT composer submit control
+
+Live Chrome accessibility inspection identified the populated composer as `textarea#prompt-textarea` and the send control as native `button#composer-submit-button` with aria-label `Send prompt`. Added exact selector handling ahead of the generic label scan and a regression test using the same DOM shape, so nested/icon-only descendants resolve to the actual control.
+
+Verification: all 177 tests passed across nine files and `npm run build` passed. The content bundle is 272.1 KB. The updated unpacked extension must be reloaded in Chrome before the final manual check.
