@@ -120,3 +120,13 @@ Created src/detection/ghana-phone.ts and tests/ghana-phone.test.ts. The rule che
 Verification: 49 phone tests plus all 30 email tests passed (79 total). `npm run build` passed strict production type checking and bundling. Tests include synthetic mobile/fixed examples, punctuation, repeats, Unicode offsets, invalid prefixes/lengths and ambiguous adjacent numeric runs. The ambiguity and unsupported formats are documented; these tests are not an accuracy benchmark.
 
 Updated README, architecture and roadmap. The browser indicator remains unchanged and checking remains inactive. Learning checkpoint: two independent detectors now share one result format. Next step: evaluate and implement support for other international phone formats, before selected identifiers and coordinator overlap handling.
+
+## 2026-09-08 — Milestone 2: international phone formats
+
+Objective: cover explicit international phone presentations without creating a hand-maintained rule for every country. Added exact `libphonenumber-js` 1.13.12 dependency and used its full local metadata and validation. Ghana formats remain delegated to the dedicated Ghana detector to prevent duplicate findings.
+
+Created src/detection/international-phone.ts and tests/international-phone.test.ts. The rule accepts `+` and `00` prefixes, preserves text and offsets, rejects malformed or embedded candidates and does not claim assignment or ownership. One plausible UK test fixture was rejected by strict library validation and remains documented as a limitation.
+
+Verification: 113 tests passed across three test files (30 email, 49 Ghana phone and 34 international phone). `npm run build` passed strict type checking and bundling. A standalone minified detector bundle measured 195,717 bytes (50,182 bytes gzip); the current content script does not import it, so the extension bundle has not grown. npm installation reported zero known vulnerabilities at the time of installation.
+
+Updated README, architecture and roadmap. The browser indicator remains unchanged and detection remains inactive. Before importing this rule into the extension, measure the combined bundle and decide whether full metadata is acceptable or should be lazy-loaded/reduced.

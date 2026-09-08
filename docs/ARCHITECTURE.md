@@ -16,6 +16,8 @@ Implemented in src/detection/types.ts. The first standalone rule is src/detectio
 
 The second standalone rule is src/detection/ghana-phone.ts; see [Ghana phone detection scope](GHANA_PHONE_DETECTION.md). Both rules return the same Finding contract. Combining them and resolving overlaps remains coordinator work before browser integration.
 
+The third standalone rule is src/detection/international-phone.ts; see [international phone detection scope](INTERNATIONAL_PHONE_DETECTION.md). It uses local full metadata and delegates Ghana formats to the Ghana rule. Its bundle impact must be measured before page integration.
+
 ```ts
 type Finding = {
   id: string;

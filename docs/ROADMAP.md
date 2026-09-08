@@ -26,7 +26,8 @@ Licence selection is deliberately deferred and does not block local extension de
 - [x] Define the Finding contract and implement email detection with synthetic tests.
 - [ ] Add the inspection coordinator and deterministic overlap handling.
 - [x] Add Ghanaian mobile/fixed-line format detection, including +233/00233 forms, with synthetic tests.
-- [ ] Add other international phone and selected identifier rules incrementally.
+- [x] Add explicit international phone-format detection with maintained local metadata and synthetic tests.
+- [ ] Add selected identifier rules incrementally.
 - Document supported formats and validation limits.
 - Build synthetic cases and tests for valid/invalid values, punctuation, boundaries, overlaps and false positives.
 
