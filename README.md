@@ -63,6 +63,8 @@ The [review panel](docs/REVIEW_PANEL.md) is implemented and tested in isolation.
 
 The [ChatGPT adapter](docs/CHATGPT_ADAPTER.md) now pauses supported sends when local findings exist and opens the review panel. Live Chrome verification of this flow is still required.
 
+Protection is off by default for each page session. Turn it on from the SecureAI Guard indicator when you want local review for that session.
+
 Verified locally with Node.js 25.0.0 and npm 11.6.2; this records the tested environment, not a requirement for that exact Node version. TypeScript and esbuild are pinned in package.json and the lockfile.
 
 The build copies manifest.json and bundles the content script into dist. Follow the [unpacked installation guide](docs/INSTALLATION.md) to load that folder into Chrome. The script displays a dismissible “SecureAI Guard — Checking not active” indicator on ChatGPT only. Do not edit dist directly: build it from src. Neither dist nor node_modules is committed.

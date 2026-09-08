@@ -4,6 +4,7 @@ import { findChatGptSendButton, installSubmitInterception, isCurrentSnapshot, wr
 
 // The indicator is always visible; inspection begins only when a supported send is attempted.
 const indicatorId = "secureai-guard-indicator";
+let interception: ReturnType<typeof installSubmitInterception> | null = null;
 
 if (!document.getElementById(indicatorId)) {
   const host = document.createElement("div");
@@ -45,10 +46,11 @@ if (!document.getElementById(indicatorId)) {
       border-radius: 6px;
       background: white;
       color: #0f172a;
-      font: 20px/1 system-ui, sans-serif;
+      font: 13px/1.2 system-ui, sans-serif;
       cursor: pointer;
     }
     button:hover { background: #e2e8f0; }
+    button:first-of-type { width: auto; height: auto; padding: 7px 9px; }
     button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
   `;
 
@@ -59,8 +61,22 @@ if (!document.getElementById(indicatorId)) {
   const title = document.createElement("strong");
   title.textContent = "SecureAI Guard";
   const status = document.createElement("span");
-  status.textContent = "Checking not active";
+  status.textContent = "Protection off · checking not active";
   label.append(title, status);
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.textContent = "Turn on protection";
+  toggle.setAttribute("aria-pressed", "false");
+  toggle.title = "Enable local review for this page session";
+  toggle.addEventListener("click", () => {
+    if (!interception) return;
+    const enabled = !interception.isEnabled();
+    interception.setEnabled(enabled);
+    toggle.textContent = enabled ? "Turn off protection" : "Turn on protection";
+    toggle.setAttribute("aria-pressed", String(enabled));
+    status.textContent = enabled ? "Protection on · local checking active" : "Protection off · checking not active";
+  });
 
   const dismiss = document.createElement("button");
   dismiss.type = "button";
@@ -69,13 +85,13 @@ if (!document.getElementById(indicatorId)) {
   dismiss.title = "Hide until the page is reloaded";
   dismiss.addEventListener("click", () => host.remove(), { once: true });
 
-  panel.append(label, dismiss);
+  panel.append(label, toggle, dismiss);
   shadow.append(style, panel);
   document.documentElement.append(host);
 }
 
 const reviewHostId = "secureai-guard-review";
-const interception = installSubmitInterception(document, (snapshot) => {
+interception = installSubmitInterception(document, (snapshot) => {
   const inspection = inspectText(snapshot.text);
   if (inspection.findings.length === 0) return false;
   document.getElementById(reviewHostId)?.remove();
@@ -94,7 +110,7 @@ const interception = installSubmitInterception(document, (snapshot) => {
     if (action.type === "redact-selected" && isCurrentSnapshot(snapshot)) writeComposerText(snapshot.element, action.result.protectedText);
     if (action.type === "send-unchanged") {
       reviewHost.remove();
-      interception.allowNextSubmit(snapshot);
+      interception?.allowNextSubmit(snapshot);
       window.setTimeout(() => findChatGptSendButton(document)?.click(), 0);
     }
     if (action.type === "edit" || action.type === "cancel" || action.type === "redact-selected") reviewHost.remove();

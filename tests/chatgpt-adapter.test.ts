@@ -35,6 +35,7 @@ describe("ChatGPT composer adapter", () => {
     const composer = findChatGptComposer(dom.window.document)!;
     const attempts: string[] = [];
     const cleanup = installSubmitInterception(dom.window.document, (snapshot, event) => { attempts.push(snapshot.text); expect(event.defaultPrevented).toBe(false); return true; });
+    cleanup.setEnabled(true);
     const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
     dom.window.document.querySelector("button")!.dispatchEvent(event);
     expect(attempts).toEqual(["adapter test"]);
@@ -47,6 +48,7 @@ describe("ChatGPT composer adapter", () => {
     const dom = new JSDOM('<textarea placeholder="Ask ChatGPT">adapter test</textarea>');
     const attempts: string[] = [];
     const cleanup = installSubmitInterception(dom.window.document, snapshot => { attempts.push(snapshot.text); return true; });
+    cleanup.setEnabled(true);
     const enter = new dom.window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true });
     dom.window.document.querySelector("textarea")!.dispatchEvent(enter);
     const shiftEnter = new dom.window.KeyboardEvent("keydown", { key: "Enter", shiftKey: true, bubbles: true, cancelable: true });
@@ -61,6 +63,7 @@ describe("ChatGPT composer adapter", () => {
     const dom = new JSDOM('<textarea placeholder="Ask ChatGPT"></textarea><button aria-label="Attach file">Attach</button>');
     let attempts = 0;
     const cleanup = installSubmitInterception(dom.window.document, () => { attempts += 1; return true; });
+    cleanup.setEnabled(true);
     const button = dom.window.document.querySelector("button")!;
     const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
     button.dispatchEvent(event);
@@ -73,6 +76,7 @@ describe("ChatGPT composer adapter", () => {
     const dom = new JSDOM('<div contenteditable="true" aria-label="Ask ChatGPT">adapter test</div><button aria-label="Send message">Send</button>');
     const snapshots = [] as string[];
     const controller = installSubmitInterception(dom.window.document, snapshot => { snapshots.push(snapshot.text); return true; });
+    controller.setEnabled(true);
     const snapshot = snapshotComposer(dom.window.document)!;
     controller.allowNextSubmit(snapshot);
     const first = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
@@ -88,11 +92,29 @@ describe("ChatGPT composer adapter", () => {
   it("does not bypass a changed snapshot", () => {
     const dom = new JSDOM('<textarea placeholder="Ask ChatGPT">original</textarea><button aria-label="Send message">Send</button>');
     const controller = installSubmitInterception(dom.window.document, () => true);
+    controller.setEnabled(true);
     controller.allowNextSubmit(snapshotComposer(dom.window.document)!);
     dom.window.document.querySelector("textarea")!.value = "changed";
     const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
     findChatGptSendButton(dom.window.document)!.dispatchEvent(event);
     expect(event.defaultPrevented).toBe(true);
+    controller.cleanup();
+  });
+
+  it("starts disabled and changes only in memory", () => {
+    const dom = new JSDOM('<textarea placeholder="Ask ChatGPT">adapter test</textarea><button aria-label="Send message">Send</button>');
+    const attempts: string[] = [];
+    const controller = installSubmitInterception(dom.window.document, snapshot => { attempts.push(snapshot.text); return true; });
+    expect(controller.isEnabled()).toBe(false);
+    const offEvent = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    findChatGptSendButton(dom.window.document)!.dispatchEvent(offEvent);
+    expect(offEvent.defaultPrevented).toBe(false);
+    controller.setEnabled(true);
+    expect(controller.isEnabled()).toBe(true);
+    const onEvent = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    findChatGptSendButton(dom.window.document)!.dispatchEvent(onEvent);
+    expect(onEvent.defaultPrevented).toBe(true);
+    expect(attempts).toEqual(["adapter test"]);
     controller.cleanup();
   });
 

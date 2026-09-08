@@ -41,6 +41,7 @@ Licence selection is deliberately deferred and does not block local extension de
 - [x] Add a read-only ChatGPT composer snapshot adapter.
 - [x] Add isolated interception logic for labelled send buttons and Enter submission.
 - [x] Connect local inspection and the review panel to supported send attempts.
+- [x] Add a session-scoped turn-on/turn-off control inside the composer indicator.
 - [ ] Verify clean prompts, paused findings and redaction in Chrome.
 - [x] Implement one-shot deliberate “Send unchanged” replay with stale-snapshot protection.
 - [ ] Verify replay behavior in Chrome.

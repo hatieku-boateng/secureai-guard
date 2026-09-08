@@ -220,3 +220,9 @@ Verification: all 170 tests passed across nine files and `npm run build` passed.
 Added `isCurrentSnapshot` to ensure a reviewed composer element is still connected and unchanged before applying a protected preview. If the user edits the prompt while the review panel is open, the redaction action no longer overwrites that newer text. The existing one-shot unchanged replay already uses the same snapshot requirement.
 
 Verification: all 171 tests passed across nine files and `npm run build` passed. Live Chrome verification of unchanged replay, redaction and stale-edit behavior remains required.
+
+## 2026-09-08 — Milestone 3: session protection switch
+
+Added a `Turn on protection` / `Turn off protection` control to the SecureAI Guard composer indicator. Protection starts disabled for each page session, uses an accessible `aria-pressed` state, and resets on reload. When disabled, the adapter leaves sends alone and does not run local inspection. The state is memory-only.
+
+Verification: all 172 tests passed across nine files and `npm run build` passed. The content bundle is 270.6 KB. Chrome verification of the control and enabled flow remains required.

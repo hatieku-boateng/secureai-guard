@@ -13,3 +13,5 @@ The content script now enables this listener and runs the local coordinator. Cle
 The controller now supports a one-shot matching bypass for Send unchanged. It requires the same composer element and unchanged snapshot, then clicks the live send button once. A changed snapshot is intercepted again, and the bypass is cleared after one attempt.
 
 `isCurrentSnapshot` checks that the captured element is still connected and its text is unchanged. The content script uses this check before writing a protected preview, so edits made while the panel is open cannot be overwritten by an older review result.
+
+Protection is session-scoped and starts disabled. The indicator includes a keyboard-accessible `Turn on protection` / `Turn off protection` button with `aria-pressed`; changing it only changes in-memory state and reload resets it. When off, the adapter leaves sends alone and does not run inspection.

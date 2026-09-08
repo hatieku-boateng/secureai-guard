@@ -54,11 +54,14 @@ export function findChatGptSendButton(document: Document): HTMLButtonElement | n
 export type SubmitInterceptionController = {
   cleanup: () => void;
   allowNextSubmit: (snapshot: ComposerSnapshot) => void;
+  setEnabled: (enabled: boolean) => void;
+  isEnabled: () => boolean;
 };
 
 /** Pause supported send attempts and hand the current snapshot to the caller. */
 export function installSubmitInterception(document: Document, onSubmitAttempt: (snapshot: ComposerSnapshot, event: Event) => boolean): SubmitInterceptionController {
   let allowedSnapshot: ComposerSnapshot | null = null;
+  let enabled = false;
   const shouldBypass = (snapshot: ComposerSnapshot): boolean => {
     if (!allowedSnapshot) return false;
     const allowed = allowedSnapshot.element === snapshot.element && allowedSnapshot.text === snapshot.text;
@@ -70,6 +73,7 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     if (!(target instanceof document.defaultView!.Element) || !isSendButton(target.closest("button") ?? target)) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
+    if (!enabled) return;
     if (shouldBypass(snapshot)) return;
     if (onSubmitAttempt(snapshot, event)) {
       event.preventDefault();
@@ -82,6 +86,7 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     if (!(target instanceof document.defaultView!.HTMLElement) || !target.matches('[contenteditable="true"], textarea')) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
+    if (!enabled) return;
     if (shouldBypass(snapshot)) return;
     if (onSubmitAttempt(snapshot, event)) {
       event.preventDefault();
@@ -92,6 +97,8 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
   document.addEventListener("keydown", handleKeydown, true);
   return {
     allowNextSubmit: snapshot => { allowedSnapshot = snapshot; },
+    setEnabled: value => { enabled = value; if (!value) allowedSnapshot = null; },
+    isEnabled: () => enabled,
     cleanup: () => {
     document.removeEventListener("click", handleClick, true);
     document.removeEventListener("keydown", handleKeydown, true);
