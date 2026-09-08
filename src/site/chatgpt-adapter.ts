@@ -21,6 +21,15 @@ export function readComposerText(element: HTMLElement): string {
   return element.innerText ?? element.textContent ?? "";
 }
 
+export function writeComposerText(element: HTMLElement, text: string): void {
+  if (element.tagName === "TEXTAREA" || element.tagName === "INPUT") {
+    (element as HTMLInputElement).value = text;
+  } else {
+    element.textContent = text;
+  }
+  element.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText", data: text }));
+}
+
 /** Capture a text snapshot for later inspection; this does not attach listeners. */
 export function snapshotComposer(document: Document): ComposerSnapshot | null {
   const element = findChatGptComposer(document);
@@ -35,15 +44,16 @@ function isSendButton(element: Element): boolean {
 }
 
 /** Pause supported send attempts and hand the current snapshot to the caller. */
-export function installSubmitInterception(document: Document, onSubmitAttempt: (snapshot: ComposerSnapshot, event: Event) => void): () => void {
+export function installSubmitInterception(document: Document, onSubmitAttempt: (snapshot: ComposerSnapshot, event: Event) => boolean): () => void {
   const handleClick = (event: MouseEvent): void => {
     const target = event.target;
     if (!(target instanceof document.defaultView!.Element) || !isSendButton(target.closest("button") ?? target)) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    onSubmitAttempt(snapshot, event);
+    if (onSubmitAttempt(snapshot, event)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
   };
   const handleKeydown = (event: KeyboardEvent): void => {
     if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
@@ -51,9 +61,10 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     if (!(target instanceof document.defaultView!.HTMLElement) || !target.matches('[contenteditable="true"], textarea')) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    onSubmitAttempt(snapshot, event);
+    if (onSubmitAttempt(snapshot, event)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
   };
   document.addEventListener("click", handleClick, true);
   document.addEventListener("keydown", handleKeydown, true);

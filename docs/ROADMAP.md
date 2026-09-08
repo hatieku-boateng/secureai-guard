@@ -40,7 +40,9 @@ Licence selection is deliberately deferred and does not block local extension de
 - [x] Add an accessible review panel in isolation with selection and explicit actions.
 - [x] Add a read-only ChatGPT composer snapshot adapter.
 - [x] Add isolated interception logic for labelled send buttons and Enter submission.
-- [ ] Verify interception selectors and behavior in Chrome.
+- [x] Connect local inspection and the review panel to supported send attempts.
+- [ ] Verify clean prompts, paused findings and redaction in Chrome.
+- [ ] Complete deliberate “Send unchanged” replay behavior.
 - [ ] Integrate the review panel with the ChatGPT site adapter.
 - Preserve content on edit/cancel, prevent stale approvals, and support deliberate send unchanged.
 - Verify complete browser flows, including repeated send attempts and changed prompts.

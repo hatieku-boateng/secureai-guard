@@ -198,3 +198,13 @@ Verification: standalone tests cover labelled synthetic student and employee val
 Added a removable listener to the ChatGPT adapter for labelled send buttons and Enter without Shift in the composer. It prevents the event and passes a fresh snapshot to a callback; empty prompts, Shift+Enter and unrelated buttons remain untouched. The content script does not enable it yet.
 
 Verification: all 168 tests passed across nine files and `npm run build` passed strict type checking and bundling. Chrome verification of the live send controls is required before enabling this listener.
+
+## 2026-09-08 — Milestone 3: connect local review flow
+
+The content script now enables the adapter, runs the local inspection coordinator and mounts the review panel when findings exist. Clean prompts are allowed through. Findings pause the supported send event. Redact selected writes the protected preview back to the captured composer and closes the panel; edit and cancel close it without submission. The panel is rendered in a shadow root with text-only content handling.
+
+`Send unchanged` remains intentionally incomplete until replay can be verified safely against the live ChatGPT control. No automatic submission was added.
+
+Verification: all 168 tests passed across nine files and `npm run build` passed. The bundled content script grew to 268.6 KB (about 275,002 bytes) because the international phone detector's full metadata is now included. This is a material tradeoff to revisit with lazy loading or reduced metadata before release. No prompt is stored or sent externally.
+
+Next checkpoint: reload the unpacked extension in Chrome and verify a clean prompt, a finding pause, selective redaction and cancel behavior using synthetic content only.
