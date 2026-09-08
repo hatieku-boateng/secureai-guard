@@ -61,6 +61,8 @@ The [redaction layer](docs/REDACTION.md) can preview selected replacements while
 
 The [review panel](docs/REVIEW_PANEL.md) is implemented and tested in isolation. It is not yet injected into ChatGPT.
 
+The initial [ChatGPT adapter](docs/CHATGPT_ADAPTER.md) only reads a composer snapshot and is not yet connected to submission.
+
 Verified locally with Node.js 25.0.0 and npm 11.6.2; this records the tested environment, not a requirement for that exact Node version. TypeScript and esbuild are pinned in package.json and the lockfile.
 
 The build copies manifest.json and bundles the content script into dist. Follow the [unpacked installation guide](docs/INSTALLATION.md) to load that folder into Chrome. The script displays a dismissible “SecureAI Guard — Checking not active” indicator on ChatGPT only. Do not edit dist directly: build it from src. Neither dist nor node_modules is committed.

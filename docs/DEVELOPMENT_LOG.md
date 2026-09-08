@@ -171,6 +171,14 @@ Verification: all 160 tests passed across eight files and `npm run build` passed
 
 Learning checkpoint: review decisions and redaction preview now have a tested UI boundary. Next: implement a ChatGPT adapter that snapshots the composer and pauses supported send actions, with browser verification after each small change.
 
+## 2026-09-08 — Milestone 3: read-only ChatGPT composer adapter
+
+Objective: begin live integration without changing the page or intercepting submission. Added src/site/chatgpt-adapter.ts, tests/chatgpt-adapter.test.ts and docs/CHATGPT_ADAPTER.md.
+
+The adapter isolates selectors for ChatGPT's Lexical editor, placeholder textarea and contenteditable fallbacks. It returns an exact element/text snapshot and explicitly excludes the SecureAI indicator. No listeners, event prevention, page mutation, storage or network access were added.
+
+Verification: adapter tests cover preferred and fallback markup, exact text snapshots, missing composers and indicator exclusion. Full test and build results will be recorded after the combined run. Live Chrome selector verification remains the next browser checkpoint.
+
 ## 2026-09-08 — Milestone 2: labelled institutional identifiers
 
 Objective: cover student and employee identifiers without pretending that one Ghana-wide format exists. Added src/detection/institutional-id.ts, tests/institutional-id.test.ts and docs/INSTITUTIONAL_ID_DETECTION.md.

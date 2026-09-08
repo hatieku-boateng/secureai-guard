@@ -26,6 +26,8 @@ The pure redaction layer in src/detection/redaction.ts consumes selected coordin
 
 The review panel in src/review/panel.ts renders findings and protected previews with DOM text APIs and emits explicit user actions. It does not submit or mutate the host page; see [review panel behavior](REVIEW_PANEL.md).
 
+The initial ChatGPT adapter in src/site/chatgpt-adapter.ts only finds the composer and reads an exact snapshot. It has no event listeners or submission behavior; see [adapter scope](CHATGPT_ADAPTER.md).
+
 ```ts
 type Finding = {
   id: string;

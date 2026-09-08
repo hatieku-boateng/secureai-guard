@@ -1,0 +1,9 @@
+# ChatGPT composer adapter
+
+The first adapter step is deliberately read-only. `snapshotComposer(document)` finds a supported composer and returns its element plus the exact current text. It does not attach listeners, prevent events, alter the composer or submit anything.
+
+Selectors are isolated in `src/site/chatgpt-adapter.ts` so ChatGPT page changes do not affect detector or redaction code. The preferred selector targets ChatGPT's Lexical editor, followed by the placeholder textarea and generic contenteditable fallbacks. The adapter must be tested against the live page before relying on any selector.
+
+The snapshot is a point-in-time value. Before applying a later review decision, the adapter must confirm that the same element still exists and its text still equals the snapshot. A changed or replaced composer requires a new inspection.
+
+This checkpoint does not intercept clicks or keyboard submission. Browser verification should confirm that the adapter can locate the current composer while leaving the page unchanged.
