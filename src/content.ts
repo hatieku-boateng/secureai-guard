@@ -1,6 +1,6 @@
 import { inspectText } from "./detection/coordinator";
 import { createReviewPanel } from "./review/panel";
-import { findChatGptSendButton, installSubmitInterception, writeComposerText } from "./site/chatgpt-adapter";
+import { findChatGptSendButton, installSubmitInterception, isCurrentSnapshot, writeComposerText } from "./site/chatgpt-adapter";
 
 // The indicator is always visible; inspection begins only when a supported send is attempted.
 const indicatorId = "secureai-guard-indicator";
@@ -91,7 +91,7 @@ const interception = installSubmitInterception(document, (snapshot) => {
     p { margin: 0 0 16px; line-height: 1.5; } ul { padding: 0; margin: 0; list-style: none; } li { margin: 8px 0; } label { display: flex; gap: 10px; align-items: flex-start; } input { width: 18px; height: 18px; flex: none; } pre { padding: 12px; max-height: 180px; overflow: auto; white-space: pre-wrap; border-radius: 8px; background: #f1f5f9; font: 13px/1.5 ui-monospace, monospace; } button { margin: 8px 8px 0 0; padding: 9px 12px; border: 1px solid #94a3b8; border-radius: 8px; background: #fff; color: #0f172a; cursor: pointer; } button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; } button:first-child { background: #0f172a; color: #fff; }
   `;
   const panel = createReviewPanel(document, inspection, (action) => {
-    if (action.type === "redact-selected") writeComposerText(snapshot.element, action.result.protectedText);
+    if (action.type === "redact-selected" && isCurrentSnapshot(snapshot)) writeComposerText(snapshot.element, action.result.protectedText);
     if (action.type === "send-unchanged") {
       reviewHost.remove();
       interception.allowNextSubmit(snapshot);

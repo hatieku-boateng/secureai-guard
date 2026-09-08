@@ -11,3 +11,5 @@ The snapshot is a point-in-time value. Before applying a later review decision, 
 The content script now enables this listener and runs the local coordinator. Clean prompts return `false` and continue normally. Findings pause the send and mount the review panel in a shadow root. Redact selected writes the protected preview into the composer for review; edit and cancel close the panel. Send unchanged is intentionally left for the next checkpoint because its replay must be verified against the live ChatGPT control.
 
 The controller now supports a one-shot matching bypass for Send unchanged. It requires the same composer element and unchanged snapshot, then clicks the live send button once. A changed snapshot is intercepted again, and the bypass is cleared after one attempt.
+
+`isCurrentSnapshot` checks that the captured element is still connected and its text is unchanged. The content script uses this check before writing a protected preview, so edits made while the panel is open cannot be overwritten by an older review result.

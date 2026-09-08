@@ -214,3 +214,9 @@ Next checkpoint: reload the unpacked extension in Chrome and verify a clean prom
 Added a one-shot bypass to the adapter controller. The review panel's Send unchanged action removes the panel, records the exact snapshot, and clicks the live send button once. The interception layer allows only the same element with the same text through; it clears the bypass immediately, and a changed snapshot is paused again.
 
 Verification: all 170 tests passed across nine files and `npm run build` passed. The bundled content script is 269.4 KB because the local international-phone metadata is included. The screenshot supplied by the user confirms the review panel and two findings appeared in Chrome; the new unchanged-replay code still needs a live Chrome test.
+
+## 2026-09-08 — Milestone 3: stale composer protection
+
+Added `isCurrentSnapshot` to ensure a reviewed composer element is still connected and unchanged before applying a protected preview. If the user edits the prompt while the review panel is open, the redaction action no longer overwrites that newer text. The existing one-shot unchanged replay already uses the same snapshot requirement.
+
+Verification: all 171 tests passed across nine files and `npm run build` passed. Live Chrome verification of unchanged replay, redaction and stale-edit behavior remains required.

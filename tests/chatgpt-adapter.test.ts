@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import { describe, expect, it } from "vitest";
-import { findChatGptComposer, findChatGptSendButton, installSubmitInterception, readComposerText, snapshotComposer } from "../src/site/chatgpt-adapter";
+import { findChatGptComposer, findChatGptSendButton, installSubmitInterception, isCurrentSnapshot, readComposerText, snapshotComposer } from "../src/site/chatgpt-adapter";
 
 describe("ChatGPT composer adapter", () => {
   it("finds the preferred Lexical contenteditable", () => {
@@ -94,5 +94,15 @@ describe("ChatGPT composer adapter", () => {
     findChatGptSendButton(dom.window.document)!.dispatchEvent(event);
     expect(event.defaultPrevented).toBe(true);
     controller.cleanup();
+  });
+
+  it("detects a changed or detached composer snapshot", () => {
+    const dom = new JSDOM('<textarea placeholder="Ask ChatGPT">original</textarea>');
+    const snapshot = snapshotComposer(dom.window.document)!;
+    expect(isCurrentSnapshot(snapshot)).toBe(true);
+    snapshot.element.value = "changed";
+    expect(isCurrentSnapshot(snapshot)).toBe(false);
+    snapshot.element.remove();
+    expect(isCurrentSnapshot(snapshot)).toBe(false);
   });
 });

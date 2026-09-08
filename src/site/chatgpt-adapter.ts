@@ -36,6 +36,10 @@ export function snapshotComposer(document: Document): ComposerSnapshot | null {
   return element ? { element, text: readComposerText(element) } : null;
 }
 
+export function isCurrentSnapshot(snapshot: ComposerSnapshot): boolean {
+  return snapshot.element.isConnected && readComposerText(snapshot.element) === snapshot.text;
+}
+
 function isSendButton(element: Element): boolean {
   if (element.tagName !== "BUTTON") return false;
   const button = element as HTMLButtonElement;
