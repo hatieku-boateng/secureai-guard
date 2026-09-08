@@ -248,3 +248,9 @@ Verification: all 174 tests passed across nine files and `npm run build` passed.
 The user supplied another Chrome screenshot showing `0249663991` sent while protection was visibly on. Added capture listeners for pointerdown and form submit, while retaining click and keyboard handling. Form submits are accepted only when the form contains the supported composer; all paths share the same snapshot, detector and review callback.
 
 Verification: all 175 tests passed across nine files and `npm run build` passed. The content bundle is 271.3 KB. Reload the unpacked extension after this build; the next manual check must turn protection on before entering the number and verify that a review panel appears.
+
+## 2026-09-08 — Add icon-only composer fallback
+
+The user supplied a third screenshot showing the number still sent while protection was on. Added a geometry fallback for clicks in the rightmost 110 pixels of the active composer, covering icon-only controls with no reliable button, role or label. It remains scoped to the composer rectangle and does not cover the attachment/microphone areas.
+
+Verification: all 176 tests passed across nine files and `npm run build` passed. The content bundle is 271.8 KB. Reload the extension again before the next manual test.

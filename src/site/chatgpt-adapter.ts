@@ -46,6 +46,13 @@ function isSendButton(element: Element): boolean {
   return /(?:send|submit|prompt-submit)/i.test(label);
 }
 
+function isLikelyComposerSendTarget(document: Document, event: MouseEvent): boolean {
+  const composer = findChatGptComposer(document);
+  if (!composer || !event.clientX || !event.clientY) return false;
+  const rect = composer.getBoundingClientRect();
+  return rect.width > 0 && event.clientX >= rect.right - 110 && event.clientX <= rect.right + 24 && event.clientY >= rect.top - 12 && event.clientY <= rect.bottom + 12;
+}
+
 export function findChatGptSendButton(document: Document): HTMLButtonElement | null {
   return Array.from(document.querySelectorAll<HTMLElement>("button, [role=button]")).find(button => isSendButton(button)) as HTMLButtonElement | undefined ?? null;
 }
@@ -72,7 +79,7 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     if (target instanceof document.defaultView!.HTMLFormElement) {
       const composer = findChatGptComposer(document);
       if (!composer || !target.contains(composer)) return;
-    } else if (!(target instanceof document.defaultView!.Element) || !isSendButton(target.closest("button, [role=button]") ?? target)) return;
+    } else if (!(target instanceof document.defaultView!.Element) || (!isSendButton(target.closest("button, [role=button]") ?? target) && !(event instanceof document.defaultView!.MouseEvent && isLikelyComposerSendTarget(document, event)))) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
     if (!enabled) return;

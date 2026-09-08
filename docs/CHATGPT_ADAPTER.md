@@ -21,3 +21,5 @@ The indicator is positioned directly above the ChatGPT composer area, centered i
 The adapter accepts nested elements inside a contenteditable composer and labelled `button` or `role="button"` send controls. This covers ChatGPT layouts where Enter originates from a paragraph inside the editor or the send arrow is not a native button.
 
 It also listens during capture for `pointerdown` and `submit` events. A form submission is intercepted only when its form contains the supported composer. These additional paths cover ChatGPT controls that consume click events internally.
+
+As a last adapter fallback, a click in the rightmost 110 pixels of the active composer's bounding rectangle is treated as a send attempt when the target has no usable label or role. This accommodates icon-only controls while avoiding the attachment and microphone areas. The geometry check is covered by a unit test and must still be confirmed on the live page.

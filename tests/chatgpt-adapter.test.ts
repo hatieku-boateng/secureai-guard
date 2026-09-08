@@ -86,6 +86,20 @@ describe("ChatGPT composer adapter", () => {
     controller.cleanup();
   });
 
+  it("uses the right-edge composer geometry when the send arrow has no label", () => {
+    const dom = new JSDOM('<div contenteditable="true" aria-label="Ask ChatGPT">adapter test</div><div class="send-icon">arrow</div>');
+    const composer = findChatGptComposer(dom.window.document)!;
+    Object.defineProperty(composer, "getBoundingClientRect", { value: () => ({ left: 100, right: 500, top: 400, bottom: 460, width: 400, height: 60 }) });
+    const attempts: string[] = [];
+    const controller = installSubmitInterception(dom.window.document, snapshot => { attempts.push(snapshot.text); return true; });
+    controller.setEnabled(true);
+    const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true, clientX: 480, clientY: 430 });
+    dom.window.document.querySelector(".send-icon")!.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(attempts).toEqual(["adapter test"]);
+    controller.cleanup();
+  });
+
   it("does not intercept empty prompts or unsupported buttons", () => {
     const dom = new JSDOM('<textarea placeholder="Ask ChatGPT"></textarea><button aria-label="Attach file">Attach</button>');
     let attempts = 0;
