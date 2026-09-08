@@ -260,3 +260,9 @@ Verification: all 176 tests passed across nine files and `npm run build` passed.
 Live Chrome accessibility inspection identified the populated composer as `textarea#prompt-textarea` and the send control as native `button#composer-submit-button` with aria-label `Send prompt`. Added exact selector handling ahead of the generic label scan and a regression test using the same DOM shape, so nested/icon-only descendants resolve to the actual control.
 
 Verification: all 177 tests passed across nine files and `npm run build` passed. The content bundle is 272.1 KB. The updated unpacked extension must be reloaded in Chrome before the final manual check.
+
+## 2026-09-08 — Direct submit-control interception
+
+The selector-matched ChatGPT submit control now receives direct pointerdown and click capture listeners in addition to document delegation. A MutationObserver reattaches those listeners when ChatGPT replaces the composer button during navigation or React rerenders, and cleanup removes all direct listeners.
+
+Verification: all 177 tests passed across nine files and `npm run build` passed. The content bundle is 273.0 KB.

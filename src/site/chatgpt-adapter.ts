@@ -75,6 +75,8 @@ export type SubmitInterceptionController = {
 export function installSubmitInterception(document: Document, onSubmitAttempt: (snapshot: ComposerSnapshot, event: Event) => boolean): SubmitInterceptionController {
   let allowedSnapshot: ComposerSnapshot | null = null;
   let enabled = false;
+  const attachedSendControls = new Set<Element>();
+  let observer: MutationObserver | null = null;
   const shouldBypass = (snapshot: ComposerSnapshot): boolean => {
     if (!allowedSnapshot) return false;
     const allowed = allowedSnapshot.element === snapshot.element && allowedSnapshot.text === snapshot.text;
@@ -112,15 +114,32 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
       event.stopImmediatePropagation();
     }
   };
+  const attachSendControls = (): void => {
+    for (const control of document.querySelectorAll<HTMLElement>(chatGptSendSelectors)) {
+      if (attachedSendControls.has(control)) continue;
+      attachedSendControls.add(control);
+      // A direct target listener runs before ChatGPT's delegated ancestor handlers.
+      control.addEventListener("pointerdown", handlePointerDown as EventListener, true);
+      control.addEventListener("click", handleClick as EventListener, true);
+    }
+  };
   document.addEventListener("click", handleClick, true);
   document.addEventListener("pointerdown", handlePointerDown, true);
   document.addEventListener("keydown", handleKeydown, true);
   document.addEventListener("submit", handleSubmit, true);
+  attachSendControls();
+  observer = new document.defaultView!.MutationObserver(attachSendControls);
+  observer.observe(document.documentElement, { childList: true, subtree: true });
   return {
     allowNextSubmit: snapshot => { allowedSnapshot = snapshot; },
     setEnabled: value => { enabled = value; if (!value) allowedSnapshot = null; },
     isEnabled: () => enabled,
     cleanup: () => {
+    observer?.disconnect();
+    for (const control of attachedSendControls) {
+      control.removeEventListener("pointerdown", handlePointerDown as EventListener, true);
+      control.removeEventListener("click", handleClick as EventListener, true);
+    }
     document.removeEventListener("click", handleClick, true);
     document.removeEventListener("pointerdown", handlePointerDown, true);
     document.removeEventListener("keydown", handleKeydown, true);
