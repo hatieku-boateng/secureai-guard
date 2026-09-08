@@ -28,4 +28,6 @@ Two numbers separated only by spaces/hyphens are ambiguous and produce no findin
 
 The 49 synthetic phone tests cover supported forms, malformed lengths, excluded families, foreign prefixes, punctuation, UTF-16 offsets, repeated occurrences and common identifier boundaries. Together with 30 email tests, these are development checks, not a held-out precision/recall evaluation.
 
+The domestic shape `0249663991` is covered by a regression test because it was used in a manual Chrome check. The number is treated only as a synthetic format example in the test suite; do not use it as a contact record.
+
 No browser integration is added by this step. ChatGPT still displays “Checking not active”.

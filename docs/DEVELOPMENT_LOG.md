@@ -232,3 +232,7 @@ Verification: all 172 tests passed across nine files and `npm run build` passed.
 Moved the SecureAI Guard indicator from the page bottom-left to a centered position directly above the ChatGPT composer area. The turn-on/off control remains session-scoped, keyboard-accessible and isolated in a shadow-root host; ChatGPT's composer DOM is not modified.
 
 The user screenshot confirmed the prior toggle rendered successfully. The new position requires a fresh Chrome reload check, including narrow-window and responsive layout behavior.
+
+## 2026-09-08 — Manual number report regression check
+
+The user reported that `0249663991` was sent without a review panel. The detector recognizes this exact domestic Ghana phone shape; a regression test now covers it. The supplied screenshot shows the message already in the conversation and the protection indicator currently on, so it does not establish whether protection was enabled before that send. A fresh test must reload the extension, turn protection on first, then enter and submit the number. If it still sends, inspect the live send-button selector/event path.

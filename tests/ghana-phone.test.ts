@@ -3,6 +3,9 @@ import { detectGhanaPhones } from "../src/detection/ghana-phone";
 
 // Invented fixtures, not contact records or guaranteed unassigned numbers.
 describe("Ghana phone format detection", () => {
+  it("detects the reported domestic number shape", () => {
+    expect(detectGhanaPhones("0249663991").map(f => f.text)).toEqual(["0249663991"]);
+  });
   it.each([
     "0241234567", "024 123 4567", "024-123-4567", "059 123 4567",
     "0531234567", "0302 123456", "032 212 3456", "+233241234567",
