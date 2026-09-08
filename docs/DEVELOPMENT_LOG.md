@@ -130,3 +130,13 @@ Created src/detection/international-phone.ts and tests/international-phone.test.
 Verification: 113 tests passed across three test files (30 email, 49 Ghana phone and 34 international phone). `npm run build` passed strict type checking and bundling. A standalone minified detector bundle measured 195,717 bytes (50,182 bytes gzip); the current content script does not import it, so the extension bundle has not grown. npm installation reported zero known vulnerabilities at the time of installation.
 
 Updated README, architecture and roadmap. The browser indicator remains unchanged and detection remains inactive. Before importing this rule into the extension, measure the combined bundle and decide whether full metadata is acceptable or should be lazy-loaded/reduced.
+
+## 2026-09-08 — Milestone 2: Ghana Card PIN shape
+
+Objective: add one carefully scoped Ghanaian identifier rule. The NIA FAQ and portal documentation describe the Ghana Card PIN shape as `GHA-` followed by nine digits, a hyphen and one final digit. Created src/detection/ghana-card.ts, tests/ghana-card.test.ts and docs/GHANA_CARD_DETECTION.md.
+
+The rule is local and format-only. It does not perform checksum, registry, identity or citizenship validation. It rejects malformed separators and embedded identifier/email text and preserves exact offsets.
+
+Verification: all 130 tests passed across four files. The Ghana Card suite covers valid case variants, malformed lengths, separators, boundaries, repeats and UTF-16 offsets; the existing email, Ghana phone and international phone suites remain green. `npm run build` passed strict type checking and bundling. The rule is not imported by the content script, so browser behavior is unchanged.
+
+Learning checkpoint: the first selected identifier rule is documented and tested, but it only recognizes a shape. Next: create the inspection coordinator to run the detectors together and resolve duplicate or overlapping findings before any ChatGPT submission interception.
