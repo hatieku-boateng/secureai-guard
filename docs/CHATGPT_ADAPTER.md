@@ -15,3 +15,5 @@ The controller now supports a one-shot matching bypass for Send unchanged. It re
 `isCurrentSnapshot` checks that the captured element is still connected and its text is unchanged. The content script uses this check before writing a protected preview, so edits made while the panel is open cannot be overwritten by an older review result.
 
 Protection is session-scoped and starts disabled. The indicator includes a keyboard-accessible `Turn on protection` / `Turn off protection` button with `aria-pressed`; changing it only changes in-memory state and reload resets it. When off, the adapter leaves sends alone and does not run inspection.
+
+The indicator is positioned directly above the ChatGPT composer area, centered in the viewport, so the session control is visually associated with composing a prompt. It remains in a separate shadow-root host to avoid changing ChatGPT's own composer DOM. Responsive positioning and narrow-window checks remain part of browser verification.

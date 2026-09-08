@@ -226,3 +226,9 @@ Verification: all 171 tests passed across nine files and `npm run build` passed.
 Added a `Turn on protection` / `Turn off protection` control to the SecureAI Guard composer indicator. Protection starts disabled for each page session, uses an accessible `aria-pressed` state, and resets on reload. When disabled, the adapter leaves sends alone and does not run local inspection. The state is memory-only.
 
 Verification: all 172 tests passed across nine files and `npm run build` passed. The content bundle is 270.6 KB. Chrome verification of the control and enabled flow remains required.
+
+## 2026-09-08 — Composer-associated session control
+
+Moved the SecureAI Guard indicator from the page bottom-left to a centered position directly above the ChatGPT composer area. The turn-on/off control remains session-scoped, keyboard-accessible and isolated in a shadow-root host; ChatGPT's composer DOM is not modified.
+
+The user screenshot confirmed the prior toggle rendered successfully. The new position requires a fresh Chrome reload check, including narrow-window and responsive layout behavior.

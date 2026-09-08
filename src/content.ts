@@ -16,8 +16,9 @@ if (!document.getElementById(indicatorId)) {
     :host {
       all: initial;
       position: fixed;
-      bottom: 16px;
-      left: 16px;
+      bottom: 86px;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 2147483647;
       max-width: calc(100vw - 32px);
       color-scheme: light;
