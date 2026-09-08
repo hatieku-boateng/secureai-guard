@@ -51,7 +51,7 @@ npm run build
 
 `npm ci` installs the exact development dependencies in package-lock.json. `npm run build` checks TypeScript and bundles src/content.ts into dist/content.js. Run `npm run typecheck` for checking alone.
 
-Run `npm test` for the synthetic email-detector tests. The [email detector](docs/EMAIL_DETECTION.md) is implemented separately and is not yet active on ChatGPT; the visible extension remains an indicator only.
+Run `npm test` for the synthetic detector tests. The [email detector](docs/EMAIL_DETECTION.md) and [Ghana phone detector](docs/GHANA_PHONE_DETECTION.md) are implemented separately and are not yet active on ChatGPT; the visible extension remains an indicator only.
 
 Verified locally with Node.js 25.0.0 and npm 11.6.2; this records the tested environment, not a requirement for that exact Node version. TypeScript and esbuild are pinned in package.json and the lockfile.
 

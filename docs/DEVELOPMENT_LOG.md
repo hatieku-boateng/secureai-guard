@@ -110,3 +110,13 @@ The rule validates common ASCII email candidates, preserves offsets and returns 
 Verification: all 30 synthetic tests passed, covering common formats, punctuation, malformed addresses, length boundaries, Unicode rejection, UTF-16 offsets, repeated occurrences and repeat calls. `npm run build` passed strict production type checking and bundling. npm installation reported zero known vulnerabilities at the time of installation. This fixture suite is not a precision/recall benchmark.
 
 Learning checkpoint: the email rule is ready for further development but checking remains inactive on ChatGPT. Next: introduce Ghanaian phone-number detection with documented formats and synthetic tests. Coordinator overlap handling remains a separate step before UI integration.
+
+## 2026-09-08 — Milestone 2: Ghana phone formats
+
+Objective: add a second standalone detector using the shared Finding format. Checked the NCA published numbering plan and ITU Ghana listing before implementation; source links and supported scope are recorded in docs/GHANA_PHONE_DETECTION.md.
+
+Created src/detection/ghana-phone.ts and tests/ghana-phone.test.ts. The rule checks broad domestic 02/03/05 families and their +233/00233 forms, including the explicit optional `(0)` presentation. It preserves formatting and offsets. It rejects wrong lengths and common embedded-identifier cases, but does not validate allocation, carrier or ownership. No additional dependency was needed.
+
+Verification: 49 phone tests plus all 30 email tests passed (79 total). `npm run build` passed strict production type checking and bundling. Tests include synthetic mobile/fixed examples, punctuation, repeats, Unicode offsets, invalid prefixes/lengths and ambiguous adjacent numeric runs. The ambiguity and unsupported formats are documented; these tests are not an accuracy benchmark.
+
+Updated README, architecture and roadmap. The browser indicator remains unchanged and checking remains inactive. Learning checkpoint: two independent detectors now share one result format. Next step: evaluate and implement support for other international phone formats, before selected identifiers and coordinator overlap handling.

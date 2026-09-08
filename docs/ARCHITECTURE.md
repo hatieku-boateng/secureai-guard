@@ -14,6 +14,8 @@
 
 Implemented in src/detection/types.ts. The first standalone rule is src/detection/email.ts; see [email detection scope](EMAIL_DETECTION.md). It is not connected to the content script yet.
 
+The second standalone rule is src/detection/ghana-phone.ts; see [Ghana phone detection scope](GHANA_PHONE_DETECTION.md). Both rules return the same Finding contract. Combining them and resolving overlaps remains coordinator work before browser integration.
+
 ```ts
 type Finding = {
   id: string;
