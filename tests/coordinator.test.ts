@@ -8,12 +8,12 @@ const finding = (id: string, category: Finding["category"], start: number, end: 
 
 describe("inspection coordinator", () => {
   it("runs all current detectors against the same snapshot", () => {
-    const text = "Email ama@example.com; phone 024 123 4567; card GHA-123456789-1; intl +1 202 555 0123.";
+    const text = "Email ama@example.com; phone 024 123 4567; card GHA-123456789-1; intl +1 202 555 0123; Student ID KNUST-2026-42.";
     const result = inspectText(text);
     expect(result.text).toBe(text);
-    expect(result.findings.map(f => f.category)).toEqual(["email", "phone", "identifier", "phone"]);
+    expect(result.findings.map(f => f.category)).toEqual(["email", "phone", "identifier", "phone", "identifier"]);
     expect(result.findings.map(f => f.text)).toEqual([
-      "ama@example.com", "024 123 4567", "GHA-123456789-1", "+1 202 555 0123",
+      "ama@example.com", "024 123 4567", "GHA-123456789-1", "+1 202 555 0123", "KNUST-2026-42",
     ]);
     for (const f of result.findings) expect(text.slice(f.start, f.end)).toBe(f.text);
   });

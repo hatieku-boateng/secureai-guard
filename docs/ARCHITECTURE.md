@@ -20,6 +20,8 @@ The third standalone rule is src/detection/international-phone.ts; see [internat
 
 The first identifier rule is src/detection/ghana-card.ts; see [Ghana Card detection scope](GHANA_CARD_DETECTION.md). It matches format only and does not validate identity. The coordinator in src/detection/coordinator.ts now runs all current rules and resolves overlaps; see [coordinator policy](INSPECTION_COORDINATOR.md).
 
+The institutional identifier rule in src/detection/institutional-id.ts is deliberately context-based because local formats vary. It recognizes labelled student/employee values and returns only the value range. The coordinator will include it after its standalone behavior is tested.
+
 ```ts
 type Finding = {
   id: string;

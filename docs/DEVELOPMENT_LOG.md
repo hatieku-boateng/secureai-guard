@@ -150,3 +150,11 @@ Objective: combine the four current local detectors into one consistent result b
 Verification: all 134 tests passed across five files. `npm run build` passed strict TypeScript checking and bundling. The coordinator is not imported by the content script, so the browser indicator and site behavior remain unchanged.
 
 Learning checkpoint: detector output is now unified and overlap behavior is explicit. Next: select and document additional institutional identifier formats, then build a review/redaction layer before intercepting ChatGPT submission.
+
+## 2026-09-08 — Milestone 2: labelled institutional identifiers
+
+Objective: cover student and employee identifiers without pretending that one Ghana-wide format exists. Added src/detection/institutional-id.ts, tests/institutional-id.test.ts and docs/INSTITUTIONAL_ID_DETECTION.md.
+
+The detector requires an explicit label such as Student ID, learner number, Employee ID or staff identification, then flags a 4–20 character alphanumeric/slash/hyphen value. It returns only the value range. This reduces arbitrary-number false positives but misses unlabelled and unsupported local formats; no real institutional data is used.
+
+Verification: standalone tests cover labelled synthetic student and employee values, case, punctuation, unsupported/short values, repeats and UTF-16 offsets. All 151 tests passed across six files, and `npm run build` passed strict type checking and bundling. The coordinator now includes this rule; the content script remains indicator-only. Next: begin the review/redaction design before connecting anything to ChatGPT submission.

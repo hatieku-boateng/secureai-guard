@@ -2,6 +2,7 @@ import { detectEmails } from "./email";
 import { detectGhanaCardPins } from "./ghana-card";
 import { detectGhanaPhones } from "./ghana-phone";
 import { detectInternationalPhones } from "./international-phone";
+import { detectInstitutionalIds } from "./institutional-id";
 import type { Finding } from "./types";
 
 export type InspectionResult = {
@@ -43,6 +44,7 @@ export function inspectText(text: string): InspectionResult {
     ...detectGhanaPhones(text),
     ...detectInternationalPhones(text),
     ...detectGhanaCardPins(text),
+    ...detectInstitutionalIds(text),
   ];
   return { text, findings: resolveFindings(findings) };
 }
