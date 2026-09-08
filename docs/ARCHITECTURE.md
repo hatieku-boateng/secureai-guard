@@ -24,6 +24,8 @@ The institutional identifier rule in src/detection/institutional-id.ts is delibe
 
 The pure redaction layer in src/detection/redaction.ts consumes selected coordinator findings and returns an in-memory protected preview. It validates the original snapshot and rejects stale or overlapping findings; see [redaction policy](REDACTION.md). It is not connected to the site adapter yet.
 
+The review panel in src/review/panel.ts renders findings and protected previews with DOM text APIs and emits explicit user actions. It does not submit or mutate the host page; see [review panel behavior](REVIEW_PANEL.md).
+
 ```ts
 type Finding = {
   id: string;

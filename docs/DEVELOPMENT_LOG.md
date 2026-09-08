@@ -161,6 +161,16 @@ Verification: all 156 tests passed across seven files and `npm run build` passed
 
 Learning checkpoint: the core preview transformation is complete. Next: design and implement the accessible review panel in isolation, then verify it before connecting submission interception.
 
+## 2026-09-08 — Milestone 3: review panel in isolation
+
+Objective: give users a clear decision surface without connecting it to a live submission action. Added src/review/panel.ts, tests/review-panel.test.ts, exact jsdom test dependency and docs/REVIEW_PANEL.md.
+
+The panel uses dialog semantics, text-only rendering for untrusted findings, selected checkboxes, protected preview and explicit Redact selected, Edit, Cancel and Send unchanged actions. It emits action objects to a future site adapter; it does not submit, edit the host page, store content or use the network.
+
+Verification: all 160 tests passed across eight files and `npm run build` passed strict type checking and bundling. JSDOM tests took longer because of its import cost, but completed successfully. Browser focus behavior and ChatGPT integration remain unverified.
+
+Learning checkpoint: review decisions and redaction preview now have a tested UI boundary. Next: implement a ChatGPT adapter that snapshots the composer and pauses supported send actions, with browser verification after each small change.
+
 ## 2026-09-08 — Milestone 2: labelled institutional identifiers
 
 Objective: cover student and employee identifiers without pretending that one Ghana-wide format exists. Added src/detection/institutional-id.ts, tests/institutional-id.test.ts and docs/INSTITUTIONAL_ID_DETECTION.md.

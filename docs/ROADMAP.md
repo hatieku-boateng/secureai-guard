@@ -37,8 +37,9 @@ Licence selection is deliberately deferred and does not block local extension de
 ## Milestone 3 — Review and redaction
 
 - [x] Add pure selected-redaction preview with stale-range and overlap checks.
+- [x] Add an accessible review panel in isolation with selection and explicit actions.
 - [ ] Intercept and verify supported submission actions.
-- [ ] Add accessible review, selection and preview panel using the redaction layer.
+- [ ] Integrate the review panel with the ChatGPT site adapter.
 - Preserve content on edit/cancel, prevent stale approvals, and support deliberate send unchanged.
 - Verify complete browser flows, including repeated send attempts and changed prompts.
 
