@@ -59,6 +59,21 @@ describe("ChatGPT composer adapter", () => {
     cleanup.cleanup();
   });
 
+  it("intercepts Enter from a nested editor node and labelled role buttons", () => {
+    const dom = new JSDOM('<div contenteditable="true" aria-label="Ask ChatGPT"><p>adapter test</p></div><div role="button" aria-label="Send message">arrow</div>');
+    const attempts: string[] = [];
+    const controller = installSubmitInterception(dom.window.document, snapshot => { attempts.push(snapshot.text); return true; });
+    controller.setEnabled(true);
+    const enter = new dom.window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true });
+    dom.window.document.querySelector("p")!.dispatchEvent(enter);
+    expect(enter.defaultPrevented).toBe(true);
+    const click = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    findChatGptSendButton(dom.window.document)!.dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(true);
+    expect(attempts).toEqual(["adapter test", "adapter test"]);
+    controller.cleanup();
+  });
+
   it("does not intercept empty prompts or unsupported buttons", () => {
     const dom = new JSDOM('<textarea placeholder="Ask ChatGPT"></textarea><button aria-label="Attach file">Attach</button>');
     let attempts = 0;

@@ -236,3 +236,9 @@ The user screenshot confirmed the prior toggle rendered successfully. The new po
 ## 2026-09-08 — Manual number report regression check
 
 The user reported that `0249663991` was sent without a review panel. The detector recognizes this exact domestic Ghana phone shape; a regression test now covers it. The supplied screenshot shows the message already in the conversation and the protection indicator currently on, so it does not establish whether protection was enabled before that send. A fresh test must reload the extension, turn protection on first, then enter and submit the number. If it still sends, inspect the live send-button selector/event path.
+
+## 2026-09-08 — Fix nested composer submission path
+
+The second manual screenshot showed the number still sent while the indicator reported protection on. The detector itself recognizes the number, so the adapter path was the likely fault. Expanded interception to recognize Enter events from nested elements inside a contenteditable composer and labelled `role="button"` send controls, in addition to native buttons.
+
+Verification: all 174 tests passed across nine files and `npm run build` passed. Added regression tests for nested editor Enter and role-button send controls. Reload the unpacked extension before repeating the Chrome check.

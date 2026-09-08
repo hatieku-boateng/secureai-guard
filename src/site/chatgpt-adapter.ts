@@ -41,14 +41,13 @@ export function isCurrentSnapshot(snapshot: ComposerSnapshot): boolean {
 }
 
 function isSendButton(element: Element): boolean {
-  if (element.tagName !== "BUTTON") return false;
-  const button = element as HTMLButtonElement;
-  const label = `${button.getAttribute("aria-label") ?? ""} ${button.getAttribute("data-testid") ?? ""} ${button.textContent ?? ""}`;
+  if (element.tagName !== "BUTTON" && element.getAttribute("role") !== "button") return false;
+  const label = `${element.getAttribute("aria-label") ?? ""} ${element.getAttribute("data-testid") ?? ""} ${element.textContent ?? ""}`;
   return /(?:send|submit|prompt-submit)/i.test(label);
 }
 
 export function findChatGptSendButton(document: Document): HTMLButtonElement | null {
-  return Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find(button => isSendButton(button)) ?? null;
+  return Array.from(document.querySelectorAll<HTMLElement>("button, [role=button]")).find(button => isSendButton(button)) as HTMLButtonElement | undefined ?? null;
 }
 
 export type SubmitInterceptionController = {
@@ -83,7 +82,7 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
   const handleKeydown = (event: KeyboardEvent): void => {
     if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
     const target = event.target;
-    if (!(target instanceof document.defaultView!.HTMLElement) || !target.matches('[contenteditable="true"], textarea')) return;
+    if (!(target instanceof document.defaultView!.HTMLElement) || !target.closest('[contenteditable="true"], textarea')) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
     if (!enabled) return;
