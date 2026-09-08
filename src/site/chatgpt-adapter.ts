@@ -43,13 +43,30 @@ function isSendButton(element: Element): boolean {
   return /(?:send|submit|prompt-submit)/i.test(label);
 }
 
+export function findChatGptSendButton(document: Document): HTMLButtonElement | null {
+  return Array.from(document.querySelectorAll<HTMLButtonElement>("button")).find(button => isSendButton(button)) ?? null;
+}
+
+export type SubmitInterceptionController = {
+  cleanup: () => void;
+  allowNextSubmit: (snapshot: ComposerSnapshot) => void;
+};
+
 /** Pause supported send attempts and hand the current snapshot to the caller. */
-export function installSubmitInterception(document: Document, onSubmitAttempt: (snapshot: ComposerSnapshot, event: Event) => boolean): () => void {
+export function installSubmitInterception(document: Document, onSubmitAttempt: (snapshot: ComposerSnapshot, event: Event) => boolean): SubmitInterceptionController {
+  let allowedSnapshot: ComposerSnapshot | null = null;
+  const shouldBypass = (snapshot: ComposerSnapshot): boolean => {
+    if (!allowedSnapshot) return false;
+    const allowed = allowedSnapshot.element === snapshot.element && allowedSnapshot.text === snapshot.text;
+    allowedSnapshot = null;
+    return allowed;
+  };
   const handleClick = (event: MouseEvent): void => {
     const target = event.target;
     if (!(target instanceof document.defaultView!.Element) || !isSendButton(target.closest("button") ?? target)) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
+    if (shouldBypass(snapshot)) return;
     if (onSubmitAttempt(snapshot, event)) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -61,6 +78,7 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
     if (!(target instanceof document.defaultView!.HTMLElement) || !target.matches('[contenteditable="true"], textarea')) return;
     const snapshot = snapshotComposer(document);
     if (!snapshot || !snapshot.text.trim()) return;
+    if (shouldBypass(snapshot)) return;
     if (onSubmitAttempt(snapshot, event)) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -68,8 +86,11 @@ export function installSubmitInterception(document: Document, onSubmitAttempt: (
   };
   document.addEventListener("click", handleClick, true);
   document.addEventListener("keydown", handleKeydown, true);
-  return () => {
+  return {
+    allowNextSubmit: snapshot => { allowedSnapshot = snapshot; },
+    cleanup: () => {
     document.removeEventListener("click", handleClick, true);
     document.removeEventListener("keydown", handleKeydown, true);
+    },
   };
 }

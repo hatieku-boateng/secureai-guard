@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import { describe, expect, it } from "vitest";
-import { findChatGptComposer, installSubmitInterception, readComposerText, snapshotComposer } from "../src/site/chatgpt-adapter";
+import { findChatGptComposer, findChatGptSendButton, installSubmitInterception, readComposerText, snapshotComposer } from "../src/site/chatgpt-adapter";
 
 describe("ChatGPT composer adapter", () => {
   it("finds the preferred Lexical contenteditable", () => {
@@ -40,7 +40,7 @@ describe("ChatGPT composer adapter", () => {
     expect(attempts).toEqual(["adapter test"]);
     expect(event.defaultPrevented).toBe(true);
     expect(composer.textContent).toBe("adapter test");
-    cleanup();
+    cleanup.cleanup();
   });
 
   it("intercepts Enter without Shift in the composer, but allows Shift+Enter", () => {
@@ -54,7 +54,7 @@ describe("ChatGPT composer adapter", () => {
     expect(attempts).toEqual(["adapter test"]);
     expect(enter.defaultPrevented).toBe(true);
     expect(shiftEnter.defaultPrevented).toBe(false);
-    cleanup();
+    cleanup.cleanup();
   });
 
   it("does not intercept empty prompts or unsupported buttons", () => {
@@ -66,6 +66,33 @@ describe("ChatGPT composer adapter", () => {
     button.dispatchEvent(event);
     expect(attempts).toBe(0);
     expect(event.defaultPrevented).toBe(false);
-    cleanup();
+    cleanup.cleanup();
+  });
+
+  it("allows one deliberate matching resend, then clears the bypass", () => {
+    const dom = new JSDOM('<div contenteditable="true" aria-label="Ask ChatGPT">adapter test</div><button aria-label="Send message">Send</button>');
+    const snapshots = [] as string[];
+    const controller = installSubmitInterception(dom.window.document, snapshot => { snapshots.push(snapshot.text); return true; });
+    const snapshot = snapshotComposer(dom.window.document)!;
+    controller.allowNextSubmit(snapshot);
+    const first = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    findChatGptSendButton(dom.window.document)!.dispatchEvent(first);
+    expect(first.defaultPrevented).toBe(false);
+    const second = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    findChatGptSendButton(dom.window.document)!.dispatchEvent(second);
+    expect(second.defaultPrevented).toBe(true);
+    expect(snapshots).toEqual(["adapter test"]);
+    controller.cleanup();
+  });
+
+  it("does not bypass a changed snapshot", () => {
+    const dom = new JSDOM('<textarea placeholder="Ask ChatGPT">original</textarea><button aria-label="Send message">Send</button>');
+    const controller = installSubmitInterception(dom.window.document, () => true);
+    controller.allowNextSubmit(snapshotComposer(dom.window.document)!);
+    dom.window.document.querySelector("textarea")!.value = "changed";
+    const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    findChatGptSendButton(dom.window.document)!.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    controller.cleanup();
   });
 });

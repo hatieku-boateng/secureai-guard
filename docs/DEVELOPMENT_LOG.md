@@ -208,3 +208,9 @@ The content script now enables the adapter, runs the local inspection coordinato
 Verification: all 168 tests passed across nine files and `npm run build` passed. The bundled content script grew to 268.6 KB (about 275,002 bytes) because the international phone detector's full metadata is now included. This is a material tradeoff to revisit with lazy loading or reduced metadata before release. No prompt is stored or sent externally.
 
 Next checkpoint: reload the unpacked extension in Chrome and verify a clean prompt, a finding pause, selective redaction and cancel behavior using synthetic content only.
+
+## 2026-09-08 — Milestone 3: deliberate unchanged replay
+
+Added a one-shot bypass to the adapter controller. The review panel's Send unchanged action removes the panel, records the exact snapshot, and clicks the live send button once. The interception layer allows only the same element with the same text through; it clears the bypass immediately, and a changed snapshot is paused again.
+
+Verification: all 170 tests passed across nine files and `npm run build` passed. The bundled content script is 269.4 KB because the local international-phone metadata is included. The screenshot supplied by the user confirms the review panel and two findings appeared in Chrome; the new unchanged-replay code still needs a live Chrome test.

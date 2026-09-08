@@ -1,6 +1,6 @@
 import { inspectText } from "./detection/coordinator";
 import { createReviewPanel } from "./review/panel";
-import { installSubmitInterception, writeComposerText } from "./site/chatgpt-adapter";
+import { findChatGptSendButton, installSubmitInterception, writeComposerText } from "./site/chatgpt-adapter";
 
 // The indicator is always visible; inspection begins only when a supported send is attempted.
 const indicatorId = "secureai-guard-indicator";
@@ -75,7 +75,7 @@ if (!document.getElementById(indicatorId)) {
 }
 
 const reviewHostId = "secureai-guard-review";
-installSubmitInterception(document, (snapshot) => {
+const interception = installSubmitInterception(document, (snapshot) => {
   const inspection = inspectText(snapshot.text);
   if (inspection.findings.length === 0) return false;
   document.getElementById(reviewHostId)?.remove();
@@ -92,6 +92,11 @@ installSubmitInterception(document, (snapshot) => {
   `;
   const panel = createReviewPanel(document, inspection, (action) => {
     if (action.type === "redact-selected") writeComposerText(snapshot.element, action.result.protectedText);
+    if (action.type === "send-unchanged") {
+      reviewHost.remove();
+      interception.allowNextSubmit(snapshot);
+      window.setTimeout(() => findChatGptSendButton(document)?.click(), 0);
+    }
     if (action.type === "edit" || action.type === "cancel" || action.type === "redact-selected") reviewHost.remove();
   });
   shadow.append(style, panel);
