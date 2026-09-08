@@ -23,8 +23,9 @@ Licence selection is deliberately deferred and does not block local extension de
 
 ## Milestone 2 — Structured detection
 
-- Implement the Finding contract and deterministic overlap handling.
-- Add email, Ghanaian phone, international phone and selected identifier rules incrementally.
+- [x] Define the Finding contract and implement email detection with synthetic tests.
+- [ ] Add the inspection coordinator and deterministic overlap handling.
+- [ ] Add Ghanaian phone, international phone and selected identifier rules incrementally.
 - Document supported formats and validation limits.
 - Build synthetic cases and tests for valid/invalid values, punctuation, boundaries, overlaps and false positives.
 

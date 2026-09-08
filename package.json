@@ -6,11 +6,13 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
+    "test": "vitest run --maxWorkers=1",
     "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && node scripts/build.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.2",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "vitest": "4.1.11"
   }
 }

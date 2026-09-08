@@ -14,4 +14,4 @@ For development sessions:
 
 Use synthetic data only. Never commit credentials, real prompts or private documents. Do not log detected sensitive values. Keep dependencies and extension permissions minimal.
 
-Use `npm ci` to install locked dependencies, `npm run typecheck` to check TypeScript and `npm run build` to check and bundle. There is no test suite yet; meaningful detector tests are planned for Milestone 2. Browser verification begins when the extension shell exists.
+Use `npm ci` to install locked dependencies, `npm test` to run synthetic detector tests, `npm run typecheck` to check production TypeScript and `npm run build` to check and bundle. Browser checks are documented in docs/INSTALLATION.md; unit tests alone do not prove browser integration works.

@@ -10,7 +10,9 @@
 6. **Local entity model (later):** lazy-loaded, evaluated name detector. Rules must work independently of model availability.
 7. **File layer (later):** local extractors, with reconstruction kept separate from extraction.
 
-## Proposed finding contract
+## Finding contract
+
+Implemented in src/detection/types.ts. The first standalone rule is src/detection/email.ts; see [email detection scope](EMAIL_DETECTION.md). It is not connected to the content script yet.
 
 ```ts
 type Finding = {

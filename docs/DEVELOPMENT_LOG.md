@@ -98,3 +98,15 @@ The user installed Chrome and confirmed loading the unpacked extension. A suppli
 The rebuild and JavaScript syntax check passed before the manual test. Computer Use could not reliably determine the browser URL, so browser evidence comes from the user's screenshot and explicit confirmations, not an automated browser test. Keyboard dismissal and absence on unrelated sites have not been tested and remain listed as follow-up checks.
 
 Updated README, security status, architecture and roadmap to reflect the observed result. This completes the basic visible-shell checkpoint; sensitive-information detection is still inactive. Next learning step: define the Finding structure and implement an email detector with synthetic tests, before connecting detection to the page.
+
+## 2026-09-08 — Milestone 2: first email detector
+
+Objective: introduce a consistent finding format and a standalone local email rule before page integration. A finding records one occurrence and its exact position; a unit test compares the function's result against an expected result.
+
+Added src/detection/types.ts, src/detection/email.ts, tests/email.test.ts and docs/EMAIL_DETECTION.md. Added Vitest 4.1.11 as an exact development dependency with a single-worker `npm test` command, following the handover's test-tool choice. Updated the lockfile, README, contributor guidance, architecture and roadmap.
+
+The rule validates common ASCII email candidates, preserves offsets and returns distinct occurrences. Unsupported formats and ambiguity are documented. It does not claim mailbox validity or complete standards coverage. There is no content-script connection, persistence or network use in the detector.
+
+Verification: all 30 synthetic tests passed, covering common formats, punctuation, malformed addresses, length boundaries, Unicode rejection, UTF-16 offsets, repeated occurrences and repeat calls. `npm run build` passed strict production type checking and bundling. npm installation reported zero known vulnerabilities at the time of installation. This fixture suite is not a precision/recall benchmark.
+
+Learning checkpoint: the email rule is ready for further development but checking remains inactive on ChatGPT. Next: introduce Ghanaian phone-number detection with documented formats and synthetic tests. Coordinator overlap handling remains a separate step before UI integration.
