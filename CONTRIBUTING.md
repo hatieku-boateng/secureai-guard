@@ -1,6 +1,6 @@
 # Contributing
 
-This project is in its documentation stage. A licence decision is pending; outside contributions are not being accepted until that decision is discussed and recorded.
+This project is in its initial toolchain stage. A licence decision is pending; outside contributions are not being accepted until that decision is discussed and recorded.
 
 For development sessions:
 
@@ -14,4 +14,4 @@ For development sessions:
 
 Use synthetic data only. Never commit credentials, real prompts or private documents. Do not log detected sensitive values. Keep dependencies and extension permissions minimal.
 
-Build and test commands will be documented when the toolchain exists.
+Use `npm ci` to install locked dependencies, `npm run typecheck` to check TypeScript and `npm run build` to check and bundle. There is no test suite yet; meaningful detector tests are planned for Milestone 2. Browser verification begins when the extension shell exists.

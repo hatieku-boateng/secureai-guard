@@ -1,6 +1,6 @@
 # Security
 
-SecureAI Guard is currently a documentation-only prototype. It provides no active browser protection yet. No release has a security-support commitment.
+SecureAI Guard currently has documentation and a build toolchain with an inert source entry point. It provides no active browser protection yet. No release has a security-support commitment.
 
 Do not publish credentials, private documents, personal information or exploit details in public issues. Use synthetic reproductions for ordinary bug reports.
 

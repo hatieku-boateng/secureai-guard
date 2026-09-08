@@ -1,0 +1,16 @@
+{
+  "name": "secureai-guard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local privacy review for generative AI prompts.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}

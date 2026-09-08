@@ -13,8 +13,8 @@ Licence selection is deliberately deferred and does not block local extension de
 
 ## Milestone 1 — Minimal extension shell
 
-- Teach package.json, manifest.json, TypeScript configuration, content scripts and build output.
-- Initialise npm and TypeScript, choose and document the minimal build toolchain.
+- [x] Teach package.json, manifest.json, TypeScript configuration, content scripts and build output.
+- [x] Initialise npm and TypeScript, choose and document the minimal build toolchain.
 - Create a Manifest V3 manifest and ChatGPT content script.
 - Display a harmless SecureAI Guard indicator, clearly stating that checking is not active.
 - Document unpacked installation and verify loading in Chrome.

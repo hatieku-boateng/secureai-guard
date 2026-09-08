@@ -52,4 +52,4 @@ Implementation must handle repeat clicks, keyboard submission, stale results and
 - Evaluate Transformers.js and small compatible NER models in Milestone 4.
 - Browser File API for TXT; evaluate DOCX/PDF libraries and OCR later.
 
-No dependencies, model downloads or Chrome permissions have been introduced at this stage.
+The build toolchain now uses TypeScript for strict checks and esbuild for a browser IIFE bundle, as recorded in [ADR 0002](decisions/0002-typescript-esbuild-toolchain.md). The content-script entry point is inert. No model downloads or Chrome permissions have been introduced.

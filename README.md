@@ -2,7 +2,7 @@
 
 A planned privacy-focused Chrome extension that helps people detect and redact sensitive information before sending prompts to generative AI tools.
 
-**Status: documentation foundation only. No extension code or privacy protection is implemented yet.**
+**Status: foundation and TypeScript build toolchain complete. No loadable extension or privacy protection is implemented yet.**
 
 The initial target is ChatGPT. Inspection will run locally in the browser, without sending prompt content to a detection service or retaining it in extension storage.
 
@@ -40,7 +40,20 @@ DOCX, PDF and OCR support are future work. Extracting text from a document does 
 - [Contribution guidance](CONTRIBUTING.md)
 - [Security guidance](SECURITY.md)
 
-Installation and build instructions will be added with the extension shell. There is currently nothing to load into Chrome.
+## Development setup
+
+Install Node.js with npm, then run these commands from the project folder:
+
+```sh
+npm ci
+npm run build
+```
+
+`npm ci` installs the exact development dependencies in package-lock.json. `npm run build` checks TypeScript and bundles src/content.ts into dist/content.js. Run `npm run typecheck` for checking alone.
+
+Verified locally with Node.js 25.0.0 and npm 11.6.2; this records the tested environment, not a requirement for that exact Node version. TypeScript and esbuild are pinned in package.json and the lockfile.
+
+The source entry point currently does nothing. A manifest and visible indicator come in the next checkpoint; there is currently nothing to load into Chrome. Do not edit dist directly: build it from src. Neither dist nor node_modules is committed.
 
 ## Licence
 
