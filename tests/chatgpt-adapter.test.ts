@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import { describe, expect, it } from "vitest";
-import { findChatGptComposer, readComposerText, snapshotComposer } from "../src/site/chatgpt-adapter";
+import { findChatGptComposer, installSubmitInterception, readComposerText, snapshotComposer } from "../src/site/chatgpt-adapter";
 
 describe("ChatGPT composer adapter", () => {
   it("finds the preferred Lexical contenteditable", () => {
@@ -28,5 +28,44 @@ describe("ChatGPT composer adapter", () => {
   it("does not select the SecureAI indicator", () => {
     const dom = new JSDOM('<div id="secureai-guard-indicator"><div contenteditable="true">fake</div></div><textarea placeholder="Ask ChatGPT"></textarea>');
     expect(findChatGptComposer(dom.window.document)?.tagName).toBe("TEXTAREA");
+  });
+
+  it("intercepts a labelled send click and provides the current snapshot", () => {
+    const dom = new JSDOM('<div contenteditable="true" aria-label="Ask ChatGPT">adapter test</div><button aria-label="Send message">Send</button>');
+    const composer = findChatGptComposer(dom.window.document)!;
+    const attempts: string[] = [];
+    const cleanup = installSubmitInterception(dom.window.document, (snapshot, event) => { attempts.push(snapshot.text); expect(event.defaultPrevented).toBe(true); });
+    const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    dom.window.document.querySelector("button")!.dispatchEvent(event);
+    expect(attempts).toEqual(["adapter test"]);
+    expect(event.defaultPrevented).toBe(true);
+    expect(composer.textContent).toBe("adapter test");
+    cleanup();
+  });
+
+  it("intercepts Enter without Shift in the composer, but allows Shift+Enter", () => {
+    const dom = new JSDOM('<textarea placeholder="Ask ChatGPT">adapter test</textarea>');
+    const attempts: string[] = [];
+    const cleanup = installSubmitInterception(dom.window.document, snapshot => attempts.push(snapshot.text));
+    const enter = new dom.window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true });
+    dom.window.document.querySelector("textarea")!.dispatchEvent(enter);
+    const shiftEnter = new dom.window.KeyboardEvent("keydown", { key: "Enter", shiftKey: true, bubbles: true, cancelable: true });
+    dom.window.document.querySelector("textarea")!.dispatchEvent(shiftEnter);
+    expect(attempts).toEqual(["adapter test"]);
+    expect(enter.defaultPrevented).toBe(true);
+    expect(shiftEnter.defaultPrevented).toBe(false);
+    cleanup();
+  });
+
+  it("does not intercept empty prompts or unsupported buttons", () => {
+    const dom = new JSDOM('<textarea placeholder="Ask ChatGPT"></textarea><button aria-label="Attach file">Attach</button>');
+    let attempts = 0;
+    const cleanup = installSubmitInterception(dom.window.document, () => { attempts += 1; });
+    const button = dom.window.document.querySelector("button")!;
+    const event = new dom.window.MouseEvent("click", { bubbles: true, cancelable: true });
+    button.dispatchEvent(event);
+    expect(attempts).toBe(0);
+    expect(event.defaultPrevented).toBe(false);
+    cleanup();
   });
 });

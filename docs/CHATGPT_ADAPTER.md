@@ -6,4 +6,4 @@ Selectors are isolated in `src/site/chatgpt-adapter.ts` so ChatGPT page changes 
 
 The snapshot is a point-in-time value. Before applying a later review decision, the adapter must confirm that the same element still exists and its text still equals the snapshot. A changed or replaced composer requires a new inspection.
 
-This checkpoint does not intercept clicks or keyboard submission. Browser verification should confirm that the adapter can locate the current composer while leaving the page unchanged.
+`installSubmitInterception` now recognizes labelled send buttons and Enter without Shift in the composer. It prevents those events and gives the caller a fresh snapshot; Shift+Enter, empty prompts and unrelated buttons are left alone. The listener is removable for cleanup. It does not inspect, redact, show a panel or submit an alternative action yet. Browser verification must confirm the selectors against the live page before enabling it in the content script.

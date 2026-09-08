@@ -171,6 +171,12 @@ Verification: all 160 tests passed across eight files and `npm run build` passed
 
 Learning checkpoint: review decisions and redaction preview now have a tested UI boundary. Next: implement a ChatGPT adapter that snapshots the composer and pauses supported send actions, with browser verification after each small change.
 
+## 2026-09-08 — Milestone 3: isolated submit interception
+
+Objective: add a removable adapter listener for supported click and keyboard submissions without connecting detection or UI. `installSubmitInterception` captures labelled send buttons and Enter without Shift in the composer, prevents the event and passes the current snapshot to a callback. Empty prompts, Shift+Enter and unrelated buttons are left unchanged.
+
+Verification: adapter tests now cover click interception, Enter/Shift+Enter behavior, empty prompts and cleanup; the full suite and build will be recorded after the combined run. The listener is not enabled by the content script yet. Chrome verification of the live send controls is required before enabling it.
+
 ## 2026-09-08 — Milestone 3: read-only ChatGPT composer adapter
 
 Objective: begin live integration without changing the page or intercepting submission. Added src/site/chatgpt-adapter.ts, tests/chatgpt-adapter.test.ts and docs/CHATGPT_ADAPTER.md.
@@ -186,3 +192,9 @@ Objective: cover student and employee identifiers without pretending that one Gh
 The detector requires an explicit label such as Student ID, learner number, Employee ID or staff identification, then flags a 4–20 character alphanumeric/slash/hyphen value. It returns only the value range. This reduces arbitrary-number false positives but misses unlabelled and unsupported local formats; no real institutional data is used.
 
 Verification: standalone tests cover labelled synthetic student and employee values, case, punctuation, unsupported/short values, repeats and UTF-16 offsets. All 151 tests passed across six files, and `npm run build` passed strict type checking and bundling. The coordinator now includes this rule; the content script remains indicator-only. Next: begin the review/redaction design before connecting anything to ChatGPT submission.
+
+## 2026-09-08 — Milestone 3: isolated submit interception
+
+Added a removable listener to the ChatGPT adapter for labelled send buttons and Enter without Shift in the composer. It prevents the event and passes a fresh snapshot to a callback; empty prompts, Shift+Enter and unrelated buttons remain untouched. The content script does not enable it yet.
+
+Verification: all 168 tests passed across nine files and `npm run build` passed strict type checking and bundling. Chrome verification of the live send controls is required before enabling this listener.
